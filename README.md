@@ -12,7 +12,17 @@ In addition, he can combine the top item in his bag with to top item he's standi
 
 The characters `v` and `^` followed by a number jump by newlines in the direction they point.
 
-As of now, there is no branching or flow, but that is up next.
+|Command|Action|
+|---|---|
+|w|move up|
+|a|move left|
+|s|move down|
+|d|move right|
+|p|put a number down(takes int argument)|
+|l|"look" at an object on the 
+ground and put it into the bag|
+
+As of now, there is no branching or flow, but that is the next step.
 
 For example:
 
