@@ -20,6 +20,7 @@ the backpacker operates on an unlimited plane of stacks and carries a backpack, 
 |f|the conditional. Compares the top item of the backpack with the top item on the ground. if there is no match, it skips to the next line|
 |v| takes argument integer. jump down n lines|
 |^| takes argument integer. jump up n lines|
+|m| takes a single integer argument and puts into the backpack|
 
 Note: e will print out ascii form of the number unless the number is preceded by a zero.
 
