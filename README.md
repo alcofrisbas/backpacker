@@ -10,7 +10,7 @@ the backpacker operates on an unlimited plane of stacks and carries a backpack, 
 |a|move left|
 |s|move down|
 |d|move right|
-|p|put a number down(takes int argument)|
+|p|put a number down(takes int argument), on empty, put top bag item onto ground. ignore if the bag is empty|
 |l|"look" at an object on the ground and put it into the bag|
 |e|empty the contents of the bag onto stdout|
 |g|empty the contents of the bag onto the ground|
