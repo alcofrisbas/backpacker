@@ -21,7 +21,8 @@ p100lp108lp114lp111lp119lp32lp44lp111lp108lp108lp101lp104le
 ```
 prints "hello, world" to standard out, and
 
-```p256p1lcwcwgsslcep10le
+```
+p256p1lcwcwgsslcep10le
 wlcsclcep10le
 ^1```
 is an infinitely looping counter starting at 1
