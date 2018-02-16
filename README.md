@@ -47,8 +47,8 @@ the extra newline is important at the end.
 
 ```
 p100p1lrwcwsslcp0lep10le
-		wlcs"r"<-SUBTRACT lcp0lep10lelc
-		p0fv2
-		^2
+wlcs"r"<-SUBTRACT lcp0lep10lelc
+p0fv2
+^2
     
 ```
