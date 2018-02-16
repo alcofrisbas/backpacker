@@ -24,5 +24,6 @@ prints "hello, world" to standard out, and
 ```
 p256p1lcwcwgsslcep10le
 wlcsclcep10le
-^1```
+^1
+```
 is an infinitely looping counter starting at 1
