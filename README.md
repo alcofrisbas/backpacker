@@ -13,3 +13,15 @@ In addition, he can combine the top item in his bag with to top item he's standi
 The characters `v` and `^` followed by a number jump by newlines in the direction they point.
 
 As of now, there is no branching or flow, but that is up next.
+
+For example:
+
+```
+p100lp108lp114lp111lp119lp32lp44lp111lp108lp108lp101lp104le
+```
+prints "hello, world" to standard out, and
+
+```p256p1lcwcwgsslcep10le
+wlcsclcep10le
+^1```
+is an infinitely looping counter starting at 1
