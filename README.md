@@ -4,14 +4,6 @@ backpacker is an esoteric language designed with a whimsical take in mind.
 
 the backpacker operates on an unlimited plane of stacks and carries a backpack, which is also a stack.
 
-the letters `w a s d` move the backpack
-
-the backpacker can put an object on the ground he's standing on `p <integer>`, put an object in his back `l`, empty the backpack onto the ground `g`, and empty the backback onto stdout `e`.
-
-In addition, he can combine the top item in his bag with to top item he's standing on with `c` and `r`, one being addition, the other subtraction.
-
-The characters `v` and `^` followed by a number jump by newlines in the direction they point.
-
 |Command|Action|
 |---|---|
 |w|move up|
@@ -19,10 +11,17 @@ The characters `v` and `^` followed by a number jump by newlines in the directio
 |s|move down|
 |d|move right|
 |p|put a number down(takes int argument)|
-|l|"look" at an object on the 
-ground and put it into the bag|
+|l|"look" at an object on the ground and put it into the bag|
+|e|empty the contents of the bag onto stdout|
+|g|empty the contents of the bag onto the ground|
+|c|combine(by addition) the top item in the backpack with the top item on the ground|
+|r|combine(by subtraction) the same|
+|t|tip out the first item in the backpack onto the ground|
+|f|the conditional. Compares the top item of the backpack with the top item on the ground. if there is no match, it skips to the next line|
+|v| takes argument integer. jump down n lines|
+|^| takes argument integer. jump up n lines|
 
-As of now, there is no branching or flow, but that is the next step.
+Note: e will print out ascii form of the number unless the number is preceded by a zero.
 
 For example:
 
