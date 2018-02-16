@@ -92,12 +92,15 @@ def next(l):
 			elif w.v == "p":
 				x += 1
 				if l[x].t != "N":
-					print("error")
-					sys.exit(1)	
+					if len(backpack) == 0:
+						continue
+					else:
+						p = backpack.pop()
 				else:
-					if not ground.get("{},{}".format(str(location[0]),str(location[1])),False):
-						ground["{},{}".format(str(location[0]),str(location[1]))] = []
-					ground["{},{}".format(str(location[0]),str(location[1]))].append(l[x].v)
+					p = l[x].v
+				if not ground.get("{},{}".format(str(location[0]),str(location[1])),False):
+					ground["{},{}".format(str(location[0]),str(location[1]))] = []
+				ground["{},{}".format(str(location[0]),str(location[1]))].append(p)
 			elif w.v == "v":
 				#print("skip")
 				x += 1
@@ -145,13 +148,23 @@ def next(l):
 					except:
 						pass
 			elif w.v == "t":
+				#print ("tip")
 				try:
-					p = backpack.pop()
-					if not ground.get("{},{}".format(str(location[0]),str(location[1])),False):
-						ground["{},{}".format(str(location[0]),str(location[1]))] = []
-					ground["{},{}".format(str(location[0]),str(location[1]))].append(p)
+					c = backpack.pop()
+					if int(c) != 0:
+						sys.stdout.write(chr(int(c)))
+					else:
+						try:
+							c = backpack.pop()
+							sys.stdout.write(str(int(c)))
+						except:
+							sys.stdout.write("0")
+					sys.stdout.flush()
+					# if not ground.get("{},{}".format(str(location[0]),str(location[1])),False):
+					# 	ground["{},{}".format(str(location[0]),str(location[1]))] = []
+					# ground["{},{}".format(str(location[0]),str(location[1]))].append(p)
 				except:
-					pass
+					print("fail")
 			elif w.v == "e":
 				#print("writing")
 				while len(backpack) > 0:

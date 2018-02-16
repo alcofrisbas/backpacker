@@ -16,7 +16,7 @@ the backpacker operates on an unlimited plane of stacks and carries a backpack, 
 |g|empty the contents of the bag onto the ground|
 |c|combine(by addition) the top item in the backpack with the top item on the ground|
 |r|combine(by subtraction) the same|
-|t|tip out the first item in the backpack onto the ground|
+|t|tip out the first item in the backpack onto the stdout|
 |f|the conditional. Compares the top item of the backpack with the top item on the ground. if there is no match, it skips to the next line|
 |v| takes argument integer. jump down n lines|
 |^| takes argument integer. jump up n lines|
