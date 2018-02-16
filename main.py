@@ -258,14 +258,18 @@ if __name__ == '__main__':
 	# 	^2
 
 	# 	"""))
-	next(tokenize("""
-		p100p1lrwcwsslcp0lep10le
-		wlcs"r"<-SUBTRACT lcp0lep10lelc
-		p0fv2
-		^2
+	# next(tokenize("""
+	# 	p100p1lrwcwsslcp0lep10le
+	# 	wlcs"r"<-SUBTRACT lcp0lep10lelc
+	# 	p0fv2
+	# 	^2
 
-		"""))
+	# 	"""))
 	# next(tokenize("""p10lme"""))
+
+	with open(sys.argv[1]) as r:
+		s = r.read()
+	next(tokenize(s))
 
 
 
