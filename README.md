@@ -103,8 +103,8 @@ p10llp0le
 a.backpack
 ```
 alddck
-hlap
-
+lap
+h
 ```
 
 m loads two integers into two stacks, then calls a. a looks for two integers in designated stacks, adds them together, then places the result at home. After a is done, m looks at home for the return value, then prints whatever is there. a is a conscientious function because it consumes its arguments, returns a value to home, and does nothing else to alter its surroundings.
