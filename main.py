@@ -20,7 +20,7 @@ def tokenize(s):
 	x = 0
 	while x < len(s):
 		char = s[x]
-		if char in "wasdlptecrg\nv^fm":
+		if char in "wasdlptecrg\nv^fmhx":
 			l.append(Token("KW",char))
 		if char.isdigit():
 			n = char
@@ -33,6 +33,7 @@ def tokenize(s):
 
 		x += 1
 	return l
+
 """
 Parse and evaluate a list of tokens
 Tried to keep the number of times errors resulted in program
@@ -40,7 +41,7 @@ termination.
 The main goal is to respond to errors by doing absolutely nothing.
 Characters that are neither numbers or commands are ignored and
 can be used as comments
-commands: w a s d f e t l p c r g \n v ^
+commands: w a s d f e t l p c r g \n v ^ m
 """
 def parseEval(l):
 	location = [0,0]
@@ -59,6 +60,9 @@ def parseEval(l):
 				location[0] = location[0]+1
 			elif w.v == "a":
 				location[0] = location[0]-1
+			elif w.v == "h":
+				location[0] = 0
+				location[1] = 0
 			elif w.v == "p":
 				x += 1
 				if l[x].t != "N":
@@ -171,6 +175,23 @@ def parseEval(l):
 				s = input("")
 				if s.isdigit():
 					backpack.append(s)
+			
+			elif w.v == "x":
+				#print("--x--")
+				lst = []
+				while len(backpack) > 0:
+					lst.append(backpack.pop())
+				
+				lst = [chr(int(i)) for i in lst]
+				fname = "".join(lst)+".backpack"
+				#print(fname)
+				with open(fname) as r:
+					text = r.read()
+				tkns = tokenize(text)
+				while len(tkns) > 0:
+					l.insert(x+1,tkns.pop())
+
+
 			else:
 				pass
 

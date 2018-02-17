@@ -21,6 +21,8 @@ the backpacker operates on an unlimited plane of stacks and carries a backpack, 
 |v| takes argument integer. jump down n lines|
 |^| takes argument integer. jump up n lines|
 |m| takes a single integer argument and puts into the backpack|
+|x| reads characters from the backpack and looks for a file with that name. the child file is immediately tokenized and executed over the same ground as the parent file.|
+|h| go to 'home', 0,0|
 
 Note: e will print out ascii form of the number unless the number is preceded by a zero.
 
