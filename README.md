@@ -85,6 +85,7 @@ p10le
 ### Quasi-functions
 
 One way to streamline or de-clutter code is to use code from another file. The following commands help with executing functions. This enables your backpacker to follow a different path over the same terrain of stacks.
+
 |Command|Action|
 |---|---|
 |x| reads characters from the backpack and looks for a file with that name. the child file is immediately tokenized and executed over the same ground as the parent file.|
