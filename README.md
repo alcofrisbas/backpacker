@@ -92,7 +92,7 @@ One way to streamline or de-clutter code is to use code from another file. The f
 |k| destroys the contents of the backpack|
 |h| go to 'home' (0,0)|
 
-Just like assembly languages and hiking in the woods, it's very polite to leave the terrain as you found it. A conscientious child file should consume the input its left and refrain from dumping its integer waste all around in different stacks, as well leaving the backpack just way it found it. The only programs that use the 'k' command should be these child-program/subroutine files. Below is an example of two programs that add two integers and print the output.
+Just like assembly languages and hiking in the woods, it's very polite to leave the terrain as you found it. A conscientious child file should consume its input and refrain from dumping its integer waste all around in different stacks, as well leaving the backpack just way it found it. The only programs that use the 'k' command should be these child-program/subroutine files. Below is an example of two programs that add two integers and print the output.
 
 m.backpack
 ```
@@ -107,4 +107,4 @@ hlap
 
 ```
 
-m loads two integers into two stacks, then calls a. a looks for two integers in designated stacks, adds them together, then places them at home. After a is done, m looks at home for the return value, then prints whatever is there. a is a conscientious function because it consumes its arguments, returns a value to home, and does nothing else to alter its surroundings.
+m loads two integers into two stacks, then calls a. a looks for two integers in designated stacks, adds them together, then places the result at home. After a is done, m looks at home for the return value, then prints whatever is there. a is a conscientious function because it consumes its arguments, returns a value to home, and does nothing else to alter its surroundings.
