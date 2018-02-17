@@ -238,8 +238,8 @@ def next(l):
 	
 	#print("")
 	#print(lookedAt[0:x])
-	print(ground)
-	print(backpack)
+	#print(ground)
+	#print(backpack)
 
 
 if __name__ == '__main__':
