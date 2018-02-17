@@ -1,8 +1,8 @@
 # backpacker
 
-backpacker is an esoteric language designed with a whimsical take in mind.
+backpacker is an esoteric language designed with a whimsical take in mind. It is a travelling/boardgame themed language based solely in stacks.
 
-the backpacker operates on an unlimited plane of stacks and carries a backpack, which is also a stack. he can pick up and look at items on the ground and put them in his bag. he can also empty the bag out onto stdout.
+the backpacker is a pointer that operates on an unlimited two-dimensional plane of stacks and carries a backpack, which is also a stack. Among other things, he can place things on the stack he is standing on, as well as look at things and print to stdout. 
 
 |Command|Action|
 |---|---|
@@ -22,6 +22,7 @@ the backpacker operates on an unlimited plane of stacks and carries a backpack, 
 |^| takes argument integer. jump up n lines|
 |m| takes a single integer argument and puts into the backpack|
 |x| reads characters from the backpack and looks for a file with that name. the child file is immediately tokenized and executed over the same ground as the parent file.|
+|k| destroys the contents of the backpack|
 |h| go to 'home', 0,0|
 
 Note: e will print out ascii form of the number unless the number is preceded by a zero.

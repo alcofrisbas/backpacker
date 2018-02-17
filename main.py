@@ -20,7 +20,7 @@ def tokenize(s):
 	x = 0
 	while x < len(s):
 		char = s[x]
-		if char in "wasdlptecrg\nv^fmhx":
+		if char in "wasdlptecrg\nv^fmhxk":
 			l.append(Token("KW",char))
 		if char.isdigit():
 			n = char
@@ -190,6 +190,8 @@ def parseEval(l):
 				tkns = tokenize(text)
 				while len(tkns) > 0:
 					l.insert(x+1,tkns.pop())
+			elif w.v == "k":
+				del backpack[:]
 
 
 			else:
