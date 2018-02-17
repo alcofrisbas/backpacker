@@ -192,7 +192,7 @@ def next(l):
 					if ground["{},{}".format(str(location[0]),str(location[1]))] == []:
 						ground["{},{}".format(str(location[0]),str(location[1]))].append(p)
 					else:
-						ground["{},{}".format(str(location[0]),str(location[1]))][-1] = int(ground["{},{}".format(str(location[0]),str(location[1]))][-1])+int(p)
+						ground["{},{}".format(str(location[0]),str(location[1]))][-1] = str(int(ground["{},{}".format(str(location[0]),str(location[1]))][-1])+int(p))
 					backpack.append(p)	
 	
 				except:
@@ -206,7 +206,7 @@ def next(l):
 					if ground["{},{}".format(str(location[0]),str(location[1]))] == []:
 						ground["{},{}".format(str(location[0]),str(location[1]))].append(p)
 					else:
-						ground["{},{}".format(str(location[0]),str(location[1]))][-1] = int(ground["{},{}".format(str(location[0]),str(location[1]))][-1])-int(p)
+						ground["{},{}".format(str(location[0]),str(location[1]))][-1] = str(int(ground["{},{}".format(str(location[0]),str(location[1]))][-1])-int(p))
 					backpack.append(p)	
 
 	
@@ -238,8 +238,8 @@ def next(l):
 	
 	#print("")
 	#print(lookedAt[0:x])
-	#print(ground)
-	#print(backpack)
+	print(ground)
+	print(backpack)
 
 
 if __name__ == '__main__':
