@@ -20,7 +20,7 @@ def tokenize(s):
 	x = 0
 	while x < len(s):
 		char = s[x]
-		if char in "wasdlptecrg\nv^fmhxku":
+		if char in "wasdlptecrg\nv^fmhxkuz":
 			l.append(Token("KW",char))
 		if char.isdigit():
 			n = char
@@ -43,11 +43,17 @@ Characters that are neither numbers or commands are ignored and
 can be used as comments
 commands: w a s d f e t l p c r g \n v ^ m
 """
-def parseEval(l):
+def setup():
 	location = [0,0]
 	backpack = []
 	ground = {}
-	x = 0
+	return location, backpack, ground
+def parseEval(l, location, backpack, ground,x):
+	#location = [0,0]
+	#backpack = []
+	#ground = {}
+	#x = 0
+	#print(len(l))
 	lookedAt = l
 	while x < len(l):
 		w = l[x]
@@ -63,6 +69,7 @@ def parseEval(l):
 			elif w.v == "h":
 				location[0] = 0
 				location[1] = 0
+				#print(location)
 			elif w.v == "p":
 				x += 1
 				# edge case: p as the last char
@@ -215,30 +222,54 @@ def parseEval(l):
 				with open(fname) as r:
 					text = r.read()
 				tkns = tokenize(text)
-				while len(tkns) > 0:
-					l.insert(x+1,tkns.pop())
+				#print tkns
+				#print(ground)
+				location, backpack, ground = parseEval(tkns, location, backpack, ground,0)
+				#print(ground)
+				#print(backpack)
+				for i in tkns:
+					pass#print(i)
+				#print("")
+				for i in l:
+					pass#print(i)
+				#print(len(l))
 			elif w.v == "k":
 				del backpack[:]
 
 			elif w.v == "u":
-				if ground.get("{},{}".format(str(location[0]),str(location[1])),False):
-					print ("full")
-					continue
-				if len(ground["{},{}".format(str(location[0]),str(location[1]))]) != 0:
-					print("full")
+				if ground.get("{},{}".format(str(location[0]),str(location[1])),False) and len(ground["{},{}".format(str(location[0]),str(location[1]))]) != 0:
+					#print("full b")
+					while l[x].v != "\n":
+						#print(l[x])
+						x+=1
+					#print(l[x])
+					x+=0
+				#print(len(l),x)
+
+			elif w.v == "z":
+				#print("deleting", location)
+				if not ground.get("{},{}".format(str(location[0]),str(location[1])),False):
+					pass
+				else:
+					#print("notPass")
+					while len(ground["{},{}".format(str(location[0]),str(location[1]))]) > 0:
+						y = ground["{},{}".format(str(location[0]),str(location[1]))].pop()
 			else:
 				pass
-
+		#print("next")
 		x += 1
 	# For debugging Code:	
 	#print(ground)
 	#print(backpack)
+	#print(len(l))
+	return location, backpack, ground
 
 
 if __name__ == '__main__':
 	with open(sys.argv[1]) as r:
 		s = r.read()
-	parseEval(tokenize(s))
+	location, backpack, ground = setup()
+	location, backpack, ground = parseEval(tokenize(s),location,backpack, ground,0)
 
 
 
