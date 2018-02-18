@@ -92,7 +92,7 @@ One way to streamline or de-clutter code is to use code from another file. The f
 |k| destroys the contents of the backpack|
 |h| go to 'home' (0,0)|
 
-Just like assembly languages and hiking in the woods, it's very polite to leave the terrain as you found it. A conscientious child file should consume the input its left and refrain from dumping its integer waste all around in different stacks, as well leaving the backpack just way it found it. The only programs that use the 'k' command should be these child-program/subroutine files. Below is an example of two programs that add two integers and print the output.
+Just like assembly languages and hiking in the woods, it's very polite to leave the terrain as you found it. A conscientious child file should consume its input and refrain from dumping its integer waste all around in different stacks, as well leaving the backpack just way it found it. The only programs that use the 'k' command should be these child-program/subroutine files. Below is an example of two programs that add two integers and print the output.
 
 m.backpack
 ```
@@ -103,13 +103,14 @@ p10llp0le
 a.backpack
 ```
 alddck
-hlap
-
+lap
+h
 ```
+
 
 m loads two integers into two stacks, then calls a. a looks for two integers in designated stacks, adds them together, then places them at home. After a is done, m looks at home for the return value, then prints whatever is there. a is a conscientious function because it consumes its arguments, returns a value to home, and does nothing else to alter its surroundings.
 
-### Quasi-Recursion
+### (Tail)Recursion
 
 Using ```x```, a file can call itself, but issues arise if the recursion needs a conditional stop; any variables created in a file will be re-created when it is called again. Using a helper file for this purpose is useful. See the following code, which prompts the user for a number, then prints out the first n numbers in the fibonacci sequence using a function that calls itself.
 
@@ -131,6 +132,8 @@ p102lx PRINT HI & CALL SELF
 
 ```
 
-The reason why this function is not fully recursive is because of how 'variables' work in backpacker. A good way to create variable is to pick a location and stockpile integers there, just like a squirrel in fall. Then, when the information is needed again, the backpacker can go to that location and access it. The consequence of this is that there is no scope whatsoever.
+The reason why this function is questionable is because of how 'variables' work in backpacker. A good way to create variable is to pick a location and stockpile integers there, just like a squirrel in fall. Then, when the information is needed again, the backpacker can go to that location and access it. The consequence of this is that there is no scope whatsoever.
 
-Using common sense, I gave hf 4 stacks north and south of home and reserved the stacks directly to the east and west for f's computation. A polite program does this. It is conscientious to respect boundaries, even if you can step right over them
+Using common sense, I gave hf 4 stacks north and south of home and reserved the stacks directly to the east and west for f's computation. A polite program does this. It is conscientious to respect boundaries, even if you can step right over them.
+
+However, on first glance, this implementation steps over minor boundaries. Each it's called, ```f``` looks at variables that ```hf```  originally initiated, information 'owned' by ```hf```. This is a violation! Well, actually, it's not. The recursive method of generating the fibonacci sequence uses parameters. This apparent breach of privacy is actually just ```f``` taking the previous two fibonacci numbers and a counter, just like any other recursive implementation of the fibonacci sequence
