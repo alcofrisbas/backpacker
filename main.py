@@ -20,7 +20,7 @@ def tokenize(s):
 	x = 0
 	while x < len(s):
 		char = s[x]
-		if char in "wasdlptecrg\nv^fmhxk":
+		if char in "wasdlptecrg\nv^fmhxku":
 			l.append(Token("KW",char))
 		if char.isdigit():
 			n = char
@@ -65,11 +65,18 @@ def parseEval(l):
 				location[1] = 0
 			elif w.v == "p":
 				x += 1
-				if l[x].t != "N":
-					if len(backpack) == 0:
-						continue
-					else:
+				# edge case: p as the last char
+				if x >= len(l):
+					if len(backpack) > 0:
 						p = backpack.pop()
+				# if next token is not an int
+				elif l[x].t != "N":
+					if len(backpack) > 0:
+						p = backpack.pop()
+						x-=1
+					else:
+						x -= 1
+						continue
 				else:
 					p = l[x].v
 				if not ground.get("{},{}".format(str(location[0]),str(location[1])),False):
@@ -172,9 +179,29 @@ def parseEval(l):
 					while l[x].v != "\n":
 						x += 1
 			elif w.v == "m":
+				"""print("m")
+				c = getch()
+				while c == " ":
+					print("space")
+					c = getch()
+				s = ""
+				while c != "\n":
+					print("chars")
+					print(c)
+					if c == " ":
+						print("'"+s+"'")
+						if s.isdigit():
+							backpack.append(s)
+							s = ""
+							continue
+						print("improper input")
+						sys.exit(1)
+					s += c
+					c = getch()"""
 				s = input("")
 				if s.isdigit():
 					backpack.append(s)
+				
 			
 			elif w.v == "x":
 				#print("--x--")
@@ -193,7 +220,12 @@ def parseEval(l):
 			elif w.v == "k":
 				del backpack[:]
 
-
+			elif w.v == "u":
+				if ground.get("{},{}".format(str(location[0]),str(location[1])),False):
+					print ("full")
+					continue
+				if len(ground["{},{}".format(str(location[0]),str(location[1]))]) != 0:
+					print("full")
 			else:
 				pass
 

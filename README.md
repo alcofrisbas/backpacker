@@ -108,3 +108,29 @@ hlap
 ```
 
 m loads two integers into two stacks, then calls a. a looks for two integers in designated stacks, adds them together, then places them at home. After a is done, m looks at home for the return value, then prints whatever is there. a is a conscientious function because it consumes its arguments, returns a value to home, and does nothing else to alter its surroundings.
+
+### Quasi-Recursion
+
+Using ```x```, a file can call itself, but issues arise if the recursion needs a conditional stop; any variables created in a file will be re-created when it is called again. Using a helper file for this purpose is useful. See the following code, which prompts the user for a number, then prints out the first n numbers in the fibonacci sequence using a function that calls itself.
+
+hf.backpack
+```
+wap1dp0ssamp INITIATE CONDITIONAL VALUES AND ITERATOR
+hap0ddp1     SETUP FIB
+hp102lx      CALL F
+```
+f.backpack
+```
+hwlcssalcpfv6 CHECK CONDITIIONAL
+hwalcdck     INCREMENT COUNTER
+hp10lalcp0lelcddckh PRINT AND ADD(QUASI N-TWO)
+wlcssalcpfv3 CHECK CONDITIIONAL
+hwalcdck     INCREMENT COUNTER
+hp10ldlcp0lelcaackh PRINT AND ADD(QUASI N-ONE)
+p102lx PRINT HI & CALL SELF
+
+```
+
+The reason why this function is not fully recursive is because of how 'variables' work in backpacker. A good way to create variable is to pick a location and stockpile integers there, just like a squirrel in fall. Then, when the information is needed again, the backpacker can go to that location and access it. The consequence of this is that there is no scope whatsoever.
+
+Using common sense, I gave hf 4 stacks north and south of home and reserved the stacks directly to the east and west for f's computation. A polite program does this. It is conscientious to respect boundaries, even if you can step right over them
