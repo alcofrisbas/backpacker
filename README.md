@@ -134,6 +134,6 @@ p102lx PRINT HI & CALL SELF
 
 The reason why this function is questionable is because of how 'variables' work in backpacker. A good way to create variable is to pick a location and stockpile integers there, just like a squirrel in fall. Then, when the information is needed again, the backpacker can go to that location and access it. The consequence of this is that there is no scope whatsoever.
 
-Using common sense, I gave hf 4 stacks north and south of home and reserved the stacks directly to the east and west for f's computation. A polite program does this. It is conscientious to respect boundaries, even if you can step right over them.
+Using common sense, I gave ```hf``` 4 stacks north and south of home and reserved the stacks directly to the east and west for ```f```'s computation. A polite program does this. It is conscientious to respect boundaries, even if you can step right over them.
 
 However, on first glance, this implementation steps over minor boundaries. Each it's called, ```f``` looks at variables that ```hf```  originally initiated, information 'owned' by ```hf```. This is a violation! Well, actually, it's not. The recursive method of generating the fibonacci sequence uses parameters. This apparent breach of privacy is actually just ```f``` taking the previous two fibonacci numbers and a counter, just like any other recursive implementation of the fibonacci sequence
