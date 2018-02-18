@@ -84,7 +84,7 @@ p10le
 
 ### Quasi-functions
 
-One way to streamline or de-clutter code is to use code from another file. The following commands help with executing functions. This enables your backpacker to follow a different path over the same terrain of stacks.
+One way to streamline or de-clutter code is to use code from another file. The following commands help with executing functions. This enables your backpacker to follow a different path over the same terrain of stacks without using a myriad of jump commands that need to be changed every time a line is inserted.
 
 |Command|Action|
 |---|---|
@@ -108,11 +108,11 @@ h
 ```
 
 
-m loads two integers into two stacks, then calls a. a looks for two integers in designated stacks, adds them together, then places them at home. After a is done, m looks at home for the return value, then prints whatever is there. a is a conscientious function because it consumes its arguments, returns a value to home, and does nothing else to alter its surroundings.
+```m``` loads two integers into two stacks, then calls ```a```. ```a``` looks for two integers in designated stacks, adds them together, then places them at home. After ```a``` is done, ```m``` looks at home for the return value, then prints whatever is there. ```a``` is a conscientious function because it consumes its arguments, returns a value to home, and does nothing else to alter its surroundings.
 
 ### (Tail)Recursion
 
-Using ```x```, a file can call itself, but issues arise if the recursion needs a conditional stop; any variables created in a file will be re-created when it is called again. Using a helper file for this purpose is useful. See the following code, which prompts the user for a number, then prints out the first n numbers in the fibonacci sequence using a function that calls itself.
+Using ```x```, a file can call itself, but issues arise if the recursion needs a conditional stop; any variables created in a file will be re-created when it is called again. Using a helper file for this purpose is pretty useful. See the following code, which prompts the user for a number, then prints out the first n numbers in the fibonacci sequence using a function that calls itself.
 
 hf.backpack
 ```
@@ -132,8 +132,8 @@ p102lx PRINT HI & CALL SELF
 
 ```
 
-The reason why this function is questionable is because of how 'variables' work in backpacker. A good way to create variable is to pick a location and stockpile integers there, just like a squirrel in fall. Then, when the information is needed again, the backpacker can go to that location and access it. The consequence of this is that there is no scope whatsoever.
+The reason why this function is questionable is because of how 'variables' work in backpacker. A good way to create a variable is to pick a location and stockpile integers there, just like a squirrel in fall. Then, when the information is needed again, the backpacker can go to that location and access it. The consequence of this is that there is no scope whatsoever.
 
 Using common sense, I gave ```hf``` 4 stacks north and south of home and reserved the stacks directly to the east and west for ```f```'s computation. A polite program does this. It is conscientious to respect boundaries, even if you can step right over them.
 
-However, on first glance, this implementation steps over minor boundaries. Each it's called, ```f``` looks at variables that ```hf```  originally initiated, information 'owned' by ```hf```. This is a violation! Well, actually, it's not. The recursive method of generating the fibonacci sequence uses parameters. This apparent breach of privacy is actually just ```f``` taking the previous two fibonacci numbers and a counter, just like any other recursive implementation of the fibonacci sequence
+However, on first glance, this implementation steps over minor boundaries. Each it's called, ```f``` looks at variables that ```hf```  originally initiated, information 'owned' by ```hf```. This is a violation! Well, actually, it's not. The recursive method of generating the fibonacci sequence uses parameters. This apparent breach of privacy is actually just ```f``` taking the previous two fibonacci numbers and a counter, just like any other recursive implementation of the fibonacci sequence.
