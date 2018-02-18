@@ -84,7 +84,7 @@ p10le
 
 ### Quasi-functions
 
-One way to streamline or de-clutter code is to use code from another file. The following commands help with executing functions. This enables your backpacker to follow a different path over the same terrain of stacks.
+One way to streamline or de-clutter code is to use code from another file. The following commands help with executing functions. This enables your backpacker to follow a different path over the same terrain of stacks without using a myriad of jump commands that need to be changed every time a line is inserted.
 
 |Command|Action|
 |---|---|
