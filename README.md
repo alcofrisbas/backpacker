@@ -1,8 +1,10 @@
-# backpacker
+# backpackr
 
-backpacker is an esoteric language designed with a whimsical take in mind. It is a travelling/boardgame themed language based solely in stacks.
+backpackr is an esoteric language designed with a whimsical take in mind. It is a travelling/boardgame themed language based solely in stacks.
 
 the backpacker is a pointer that operates on an unlimited two-dimensional plane of stacks and carries a backpack, which is also a stack. Among other things, he can place things on the stack he is standing on, as well as look at things and print to stdout. 
+
+In this repo, there is a sloppily-written interpreter for backpackr.
 
 |Command|Action|
 |---|---|
