@@ -167,8 +167,9 @@ def parseEval(l, location, backpack, ground,x):
 					backpack.append(p)	
 	
 				except:
-					print("combination error")
-					sys.exit(1)
+					pass
+					#print("combination error")
+					#sys.exit(1)
 			elif w.v == "r":
 				try:
 					p = backpack.pop()
@@ -182,8 +183,9 @@ def parseEval(l, location, backpack, ground,x):
 
 	
 				except:
-					print("reduction error")
-					sys.exit(1)
+					pass
+					#print("reduction error")
+					#sys.exit(1)
 			elif w.v == "f":
 				p = backpack.pop()
 				if str(p) != str(ground["{},{}".format(str(location[0]),str(location[1]))].pop()):
