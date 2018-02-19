@@ -41,7 +41,7 @@ termination.
 The main goal is to respond to errors by doing absolutely nothing.
 Characters that are neither numbers or commands are ignored and
 can be used as comments
-commands: w a s d f e t l p c r g \n v ^ m
+commands: w a s d f e t l p c r g v ^ m x k u z h
 """
 def setup():
 	location = [0,0]
@@ -91,26 +91,30 @@ def parseEval(l, location, backpack, ground,x):
 				ground["{},{}".format(str(location[0]),str(location[1]))].append(p)
 			elif w.v == "v":
 				x += 1
+				if x >= len(l):
+					continue
 				if l[x].t != "N":
-					print("error")
-					sys.exit(1)
+					p = 1
 				else:
-					for i in range(int(l[x].v)+1):
-						while l[x].v != "\n":
-							x += 1
+					p = int(l[x].v) + 1
+				for i in range(p):
+					while l[x].v != "\n":
 						x += 1
+					x += 1
 				x -= 1
 
 			elif w.v == "^":
 				x += 1
+				if x >= len(l):
+					continue
 				if l[x].t != "N":
-					print("error")
-					sys.exit(1)
+					p = 1
 				else:
-					for i in range(int(l[x].v)+1):
-						while x > 0 and l[x].v != "\n":
-							x -= 1
+					p = int(l[x+1]) + 1
+				for i in range(int(l[x].v)+1):
+					while x > 0 and l[x].v != "\n":
 						x -= 1
+					x -= 1
 				x -= 1
 
 			elif w.v == "l":
@@ -217,7 +221,7 @@ def parseEval(l, location, backpack, ground,x):
 					lst.append(backpack.pop())
 				
 				lst = [chr(int(i)) for i in lst]
-				fname = "".join(lst)+".backpack"
+				fname = "".join(lst)+".bpkr"
 				#print(fname)
 				with open(fname) as r:
 					text = r.read()
