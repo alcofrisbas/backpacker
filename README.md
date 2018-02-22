@@ -96,13 +96,13 @@ One way to streamline or de-clutter code is to use code from another file. The f
 
 Just like assembly languages and hiking in the woods, it's very polite to leave the terrain as you found it. A conscientious child file should consume its input and refrain from dumping its integer waste all around in different stacks, as well leaving the backpack just way it found it. The only programs that use the 'k' command should be these child-program/subroutine files. Below is an example of two programs that add two integers and print the output.
 
-m.backpack
+m.bpkr
 ```
 ap20ddp3
 ap97lx
 p10llp0le
 ```
-a.backpack
+a.bpkr
 ```
 alddck
 lap
@@ -116,13 +116,13 @@ h
 
 Using ```x```, a file can call itself, but issues arise if the recursion needs a conditional stop; any variables created in a file will be re-created when it is called again. Using a helper file for this purpose is pretty useful. See the following code, which prompts the user for a number, then prints out the first n numbers in the fibonacci sequence using a function that calls itself.
 
-hf.backpack
+hf.bpkr
 ```
 wap1dp0ssamp INITIATE CONDITIONAL VALUES AND ITERATOR
 hap0ddp1     SETUP FIB
 hp102lx      CALL F
 ```
-f.backpack
+f.bpkr
 ```
 hwlcssalcpfv6 CHECK CONDITIIONAL
 hwalcdck     INCREMENT COUNTER
