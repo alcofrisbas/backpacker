@@ -49,11 +49,6 @@ def setup():
 	ground = {}
 	return location, backpack, ground
 def parseEval(l, location, backpack, ground,x):
-	#location = [0,0]
-	#backpack = []
-	#ground = {}
-	#x = 0
-	#print(len(l))
 	lookedAt = l
 	while x < len(l):
 		w = l[x]
@@ -69,7 +64,6 @@ def parseEval(l, location, backpack, ground,x):
 			elif w.v == "h":
 				location[0] = 0
 				location[1] = 0
-				#print(location)
 			elif w.v == "p":
 				x += 1
 				# edge case: p as the last char
@@ -110,7 +104,7 @@ def parseEval(l, location, backpack, ground,x):
 				if l[x].t != "N":
 					p = 1
 				else:
-					p = int(l[x+1]) + 1
+					p = int(l[x].v) + 1
 				for i in range(int(l[x].v)+1):
 					while x > 0 and l[x].v != "\n":
 						x -= 1
@@ -164,12 +158,10 @@ def parseEval(l, location, backpack, ground,x):
 						ground["{},{}".format(str(location[0]),str(location[1]))].append(p)
 					else:
 						ground["{},{}".format(str(location[0]),str(location[1]))][-1] = str(int(ground["{},{}".format(str(location[0]),str(location[1]))][-1])+int(p))
-					backpack.append(p)	
-	
+					backpack.append(p)
+
 				except:
 					pass
-					#print("combination error")
-					#sys.exit(1)
 			elif w.v == "r":
 				try:
 					p = backpack.pop()
@@ -179,95 +171,56 @@ def parseEval(l, location, backpack, ground,x):
 						ground["{},{}".format(str(location[0]),str(location[1]))].append(p)
 					else:
 						ground["{},{}".format(str(location[0]),str(location[1]))][-1] = str(int(ground["{},{}".format(str(location[0]),str(location[1]))][-1])-int(p))
-					backpack.append(p)	
+					backpack.append(p)
 
-	
+
 				except:
 					pass
-					#print("reduction error")
-					#sys.exit(1)
 			elif w.v == "f":
 				p = backpack.pop()
 				if str(p) != str(ground["{},{}".format(str(location[0]),str(location[1]))].pop()):
 					while l[x].v != "\n":
 						x += 1
 			elif w.v == "m":
-				"""print("m")
-				c = getch()
-				while c == " ":
-					print("space")
-					c = getch()
-				s = ""
-				while c != "\n":
-					print("chars")
-					print(c)
-					if c == " ":
-						print("'"+s+"'")
-						if s.isdigit():
-							backpack.append(s)
-							s = ""
-							continue
-						print("improper input")
-						sys.exit(1)
-					s += c
-					c = getch()"""
 				s = input("")
 				if s.isdigit():
 					backpack.append(s)
-				
-			
+
+
 			elif w.v == "x":
 				#print("--x--")
 				lst = []
 				while len(backpack) > 0:
 					lst.append(backpack.pop())
-				
+
 				lst = [chr(int(i)) for i in lst]
 				fname = "".join(lst)+".bpkr"
 				#print(fname)
 				with open(fname) as r:
 					text = r.read()
 				tkns = tokenize(text)
-				#print tkns
-				#print(ground)
+
 				location, backpack, ground = parseEval(tkns, location, backpack, ground,0)
-				#print(ground)
-				#print(backpack)
-				for i in tkns:
-					pass#print(i)
-				#print("")
-				for i in l:
-					pass#print(i)
-				#print(len(l))
 			elif w.v == "k":
 				del backpack[:]
 
 			elif w.v == "u":
 				if ground.get("{},{}".format(str(location[0]),str(location[1])),False) and len(ground["{},{}".format(str(location[0]),str(location[1]))]) != 0:
-					#print("full b")
 					while l[x].v != "\n":
 						#print(l[x])
 						x+=1
-					#print(l[x])
 					x+=0
-				#print(len(l),x)
 
 			elif w.v == "z":
-				#print("deleting", location)
 				if not ground.get("{},{}".format(str(location[0]),str(location[1])),False):
 					pass
 				else:
-					#print("notPass")
 					while len(ground["{},{}".format(str(location[0]),str(location[1]))]) > 0:
 						y = ground["{},{}".format(str(location[0]),str(location[1]))].pop()
 			else:
 				pass
-		#print("next")
 		x += 1
-	# For debugging Code:	
-	#print(ground)
-	#print(backpack)
-	#print(len(l))
+		#print(w.v, ground)
 	return location, backpack, ground
 
 
@@ -276,9 +229,3 @@ if __name__ == '__main__':
 		s = r.read()
 	location, backpack, ground = setup()
 	location, backpack, ground = parseEval(tokenize(s),location,backpack, ground,0)
-
-
-
-
-
-
