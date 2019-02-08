@@ -15,14 +15,18 @@ Tokenize input string and return a list of typed tokens
 Type: KW: keyword
       N:  number
 """
-def tokenize(s):
+def tokenize(s, debug=False):
 	l = []
 	x = 0
 	while x < len(s):
 		char = s[x]
 		if char in "wasdlptecrg\nv^fmhxkuz":
 			l.append(Token("KW",char))
-		if char.isdigit():
+		elif char == ".":
+			l.append(Token("DOT",char))
+		elif char == "?":
+			l.append(Token("STOP", char))
+		elif char.isdigit():
 			n = char
 			x += 1
 			while x < len(s) and s[x].isdigit():
@@ -32,6 +36,9 @@ def tokenize(s):
 			x -= 1
 
 		x += 1
+	if debug:
+		for i in l:
+			print(i)
 	return l
 
 """
@@ -52,6 +59,18 @@ def parseEval(l, location, backpack, ground,x):
 	lookedAt = l
 	while x < len(l):
 		w = l[x]
+		if w.t == "DOT":
+			times = l[x+1]
+			if times.t != "N":
+				continue
+			times = int(l[x+1].v)
+			#print(times)
+			for i in range(times-1):
+				y = x+1
+				while y < len(l) and l[y].t != "STOP":
+					y += 1
+				parseEval(l[x+2:y], location,backpack, ground, 0)
+			x += 1
 		if w.t == "KW":
 			if w.v == "w":
 				location[1] = location[1]+1
@@ -227,5 +246,10 @@ def parseEval(l, location, backpack, ground,x):
 if __name__ == '__main__':
 	with open(sys.argv[1]) as r:
 		s = r.read()
+	debug = False
+	if len(sys.argv)==3 and sys.argv[2] == "-d":
+		debug = True
 	location, backpack, ground = setup()
-	location, backpack, ground = parseEval(tokenize(s),location,backpack, ground,0)
+	location, backpack, ground = parseEval(tokenize(s, debug=debug),location,backpack, ground,0)
+	if debug:
+		print(ground)
