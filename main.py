@@ -14,18 +14,23 @@ class Token:
 Tokenize input string and return a list of typed tokens
 Type: KW: keyword
       N:  number
+	  DOT/STOP: loop flow
 """
 def tokenize(s, debug=False):
 	l = []
 	x = 0
+	loop = []
 	while x < len(s):
 		char = s[x]
 		if char in "wasdlptecrg\nv^fmhxkuz":
 			l.append(Token("KW",char))
 		elif char == ".":
-			l.append(Token("DOT",char))
-		elif char == "?":
-			l.append(Token("STOP", char))
+			#l.append(Token("DOT",char))
+			if x < len(s)-1:
+				if s[x+1].isdigit():
+					l.append(Token("DOT", char))
+				else:
+					l.append(Token("STOP", char))
 		elif char.isdigit():
 			n = char
 			x += 1
@@ -57,21 +62,31 @@ def setup():
 	return location, backpack, ground
 def parseEval(l, location, backpack, ground,x):
 	lookedAt = l
+	loop = 0
 	while x < len(l):
 		w = l[x]
+		# loop
 		if w.t == "DOT":
+			loop += 1
 			times = l[x+1]
 			if times.t != "N":
 				continue
 			times = int(l[x+1].v)
-			#print(times)
+			y = x+1
+			# get code to execute
+			while y < len(l) and loop > 0:
+				if l[y].t == "DOT":
+					loop += 1
+				if l[y].t == "STOP":
+					loop -= 1
+				y += 1
+			# execute it times times
 			for i in range(times-1):
-				y = x+1
-				while y < len(l) and l[y].t != "STOP":
-					y += 1
-				parseEval(l[x+2:y], location,backpack, ground, 0)
+				parseEval(l[x+2:y-1], location,backpack, ground, 0)
 			x += 1
+		# keyword handling
 		if w.t == "KW":
+			#movement
 			if w.v == "w":
 				location[1] = location[1]+1
 			elif w.v == "s":
@@ -83,6 +98,7 @@ def parseEval(l, location, backpack, ground,x):
 			elif w.v == "h":
 				location[0] = 0
 				location[1] = 0
+			# put command
 			elif w.v == "p":
 				x += 1
 				# edge case: p as the last char
@@ -102,6 +118,7 @@ def parseEval(l, location, backpack, ground,x):
 				if not ground.get("{},{}".format(str(location[0]),str(location[1])),False):
 					ground["{},{}".format(str(location[0]),str(location[1]))] = []
 				ground["{},{}".format(str(location[0]),str(location[1]))].append(p)
+			# jump down
 			elif w.v == "v":
 				x += 1
 				if x >= len(l):
@@ -115,7 +132,7 @@ def parseEval(l, location, backpack, ground,x):
 						x += 1
 					x += 1
 				x -= 1
-
+			# jump down
 			elif w.v == "^":
 				x += 1
 				if x >= len(l):
@@ -129,7 +146,7 @@ def parseEval(l, location, backpack, ground,x):
 						x -= 1
 					x -= 1
 				x -= 1
-
+			# look
 			elif w.v == "l":
 				if ground.get("{},{}".format(str(location[0]),str(location[1])),False):
 					try:
@@ -137,6 +154,7 @@ def parseEval(l, location, backpack, ground,x):
 						backpack.append(p)
 					except:
 						pass
+			# print 1
 			elif w.v == "t":
 				try:
 					c = backpack.pop()
@@ -151,6 +169,7 @@ def parseEval(l, location, backpack, ground,x):
 					sys.stdout.flush()
 				except:
 					print("fail")
+			# print all
 			elif w.v == "e":
 				while len(backpack) > 0:
 					c = backpack.pop()
@@ -163,11 +182,13 @@ def parseEval(l, location, backpack, ground,x):
 						except:
 							sys.stdout.write("0")
 					sys.stdout.flush()
+			# empty on spot
 			elif w.v == "g":
 				if not ground.get("{},{}".format(str(location[0]),str(location[1])),False):
 						ground["{},{}".format(str(location[0]),str(location[1]))] = []
 				while len(backpack) > 0:
 					ground["{},{}".format(str(location[0]),str(location[1]))].append(backpack.pop())
+			# add
 			elif w.v == "c":
 				try:
 					p = backpack.pop()
@@ -181,6 +202,7 @@ def parseEval(l, location, backpack, ground,x):
 
 				except:
 					pass
+			# subtract
 			elif w.v == "r":
 				try:
 					p = backpack.pop()
@@ -195,17 +217,19 @@ def parseEval(l, location, backpack, ground,x):
 
 				except:
 					pass
+			# conditional
 			elif w.v == "f":
 				p = backpack.pop()
 				if str(p) != str(ground["{},{}".format(str(location[0]),str(location[1]))].pop()):
 					while l[x].v != "\n":
 						x += 1
+			# input data
 			elif w.v == "m":
 				s = input("")
 				if s.isdigit():
 					backpack.append(s)
 
-
+			# execute file
 			elif w.v == "x":
 				#print("--x--")
 				lst = []
@@ -220,16 +244,17 @@ def parseEval(l, location, backpack, ground,x):
 				tkns = tokenize(text)
 
 				location, backpack, ground = parseEval(tkns, location, backpack, ground,0)
+			# delete backpack
 			elif w.v == "k":
 				del backpack[:]
-
+			# check if ground is empty
 			elif w.v == "u":
 				if ground.get("{},{}".format(str(location[0]),str(location[1])),False) and len(ground["{},{}".format(str(location[0]),str(location[1]))]) != 0:
 					while l[x].v != "\n":
 						#print(l[x])
 						x+=1
 					x+=0
-
+			# empty ground underneath pointer
 			elif w.v == "z":
 				if not ground.get("{},{}".format(str(location[0]),str(location[1])),False):
 					pass
