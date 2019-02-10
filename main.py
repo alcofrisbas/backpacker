@@ -31,6 +31,8 @@ def tokenize(s, debug=False):
 					l.append(Token("DOT", char))
 				else:
 					l.append(Token("STOP", char))
+		elif char == "?":
+			l.appent(Token("STAR", 0))
 		elif char.isdigit():
 			n = char
 			x += 1
@@ -66,10 +68,15 @@ def parseEval(l, location, backpack, ground,x):
 	while x < len(l):
 		w = l[x]
 		# loop
+		if w.t == "STAR":
+			if backpack:
+				w.v = backpack[-1]
+			else:
+				w.v = 0
 		if w.t == "DOT":
 			loop += 1
 			times = l[x+1]
-			if times.t != "N":
+			if times.t not in ["N", "STAR"]:
 				continue
 			times = int(l[x+1].v)
 			y = x+1
@@ -106,7 +113,7 @@ def parseEval(l, location, backpack, ground,x):
 					if len(backpack) > 0:
 						p = backpack.pop()
 				# if next token is not an int
-				elif l[x].t != "N":
+				elif l[x].t not in ["N", "STAR"]:
 					if len(backpack) > 0:
 						p = backpack.pop()
 						x-=1
@@ -123,7 +130,7 @@ def parseEval(l, location, backpack, ground,x):
 				x += 1
 				if x >= len(l):
 					continue
-				if l[x].t != "N":
+				if l[x].t not in ["N", "STAR"]:
 					p = 1
 				else:
 					p = int(l[x].v) + 1
@@ -137,7 +144,7 @@ def parseEval(l, location, backpack, ground,x):
 				x += 1
 				if x >= len(l):
 					continue
-				if l[x].t != "N":
+				if l[x].t not in ["N", "STAR"]:
 					p = 1
 				else:
 					p = int(l[x].v) + 1
@@ -265,6 +272,7 @@ def parseEval(l, location, backpack, ground,x):
 				pass
 		x += 1
 		#print(w.v, ground)
+
 	return location, backpack, ground
 
 
