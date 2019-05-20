@@ -19,13 +19,18 @@ Tile* tile(void){
 Tile* walk(Tile *t, int dir) {
     Tile* next;
     if (t->links[dir] != NULL) {
-        //printf("found\n");
-        //fflush(stdout);
-        //printf("%d\n",t->links[dir]->data);
         next = t->links[dir];
-        //printf("");
+        
     }else {
+        /* create the new tile
+        later, this will have to be
+        pretty smart.
+        right now, i need to 
+        just get it to work...
+        */
         next = tile();
+        // for eventual double linkage
+        //t->links[3-dir] = next;
         printf("not found\n");
     }
     return next;
