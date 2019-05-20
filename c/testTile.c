@@ -3,27 +3,32 @@
 #include "tile.c"
 
 int main(void) {
-    Tile *t, *s ,*n;
+    Tile *t, *s ,*n, *m;
     /* test for null */
-    
-    t = tile();
-    s = tile();
-    if (t->links[0] == NULL){
-        printf("null\n");
-    }
-    
+
+    t = newTile();
+    s = newTile();
+
+
     t->data = 5;
     s->data = 6;
-    
-    printf("t: %p, data: %i\n", t, t->data);
-    printf("s: %p, data: %i\n", s, s->data);
-    
+
+    printTile(t);
+    printTile(s);
+
     t->links[0] = s;
-    
-    
+
+
     n = walk(t, 0);
-    printf("n: %p, data: %i\n", n, n->data);
+    if (n->links[0] == NULL){
+        printf("null\n");
+    } else {
+        printf("not null: %p\n", n->links[0]);
+    }
+    m = walk(n, 0);
+    printTile(n);
+    printTile(m);
     free(t);
-    free(s);
+    //free(n);
     return 0;
 }
