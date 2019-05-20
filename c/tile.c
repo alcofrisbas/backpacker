@@ -7,17 +7,29 @@ typedef struct Tile Tile;
 3: south
 */
 struct Tile{
-    int x, y, seen;
+    /*
+     * x, y are coords
+     * seen: 0 or 1 for search algos
+     * created: makes a single path
+     * based on a walk for deletion...
+     */
+    int x, y, seen, created;
     struct Tile* links[4];
+    struct Tile* creator;
     int data;
 };
 
 Tile* newTile(void){
     Tile *t;
     t  = malloc(sizeof(Tile));
+    if (t == NULL ) {
+        printf("MEMORY ERROR: TILE\n" );
+        exit(1);
+    }
     t->x = 0;
     t->y = 0;
     t->seen = 0;
+    t->created=0;
     t->links[0] = NULL;
     t->links[1] = NULL;
     t->links[2] = NULL;
@@ -29,6 +41,9 @@ Tile* newTile(void){
 void connect_adjacent(Tile *t, Tile *s, int dir){
     t->links[dir] = s;
     s->links[3-dir] = t;
+    if (!s->created) {
+        s->creator = t;
+    }
 }
 /* works */
 int connected(Tile *t, Tile *s) {
@@ -112,13 +127,9 @@ void connect(Tile *current, Tile *goal){
 Tile* walk(Tile *t, int dir) {
     Tile* next;
     if (t->links[dir] != NULL) {
-        // printf("found\n");
         next = t->links[dir];
     } else {
         next = newTile();
-        // printf("not found: making... ");
-        // fflush(stdout);
-        // printf("%p\n", next);
         /*
         0 -> 0,1
         1 -> -1, 0
@@ -138,7 +149,6 @@ Tile* walk(Tile *t, int dir) {
             next->y = t->y - 1;
             next->x = t->x;
         }
-        // for eventual double linkage
         connect_adjacent(t, next, dir);
         connect(next, next);
         clean(next);
@@ -147,20 +157,17 @@ Tile* walk(Tile *t, int dir) {
 }
 
 void printTile(Tile *t);
-/* TODO implement me! */
-/* this just doesn't work */
+
 void tileFree(Tile *t){
     int i;
     for(i=0;i<4;i++){
-        if (t->links[i]!= NULL){
-            // decouple for future -- doesn't work...
+        if (t->links[i]!= NULL && t->links[i]->creator==t){
             t->links[i]->links[3-i] = NULL;
-            printf("freeing: ");
-            printTile(t);
             tileFree(t->links[i]);
-            // t->links[i] = NULL;
         }
     }
+    printf("freeing: ");
+    printTile(t);
     free(t);
     t = NULL;
 }
