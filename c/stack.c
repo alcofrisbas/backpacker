@@ -39,6 +39,12 @@ int pop(StackValue *head){
     return i;
 }
 
+int peek(StackValue *head) {
+    if (head->next != NULL) {
+        return head->next->data;
+    } return 0;
+}
+
 /* frees all */
 void freeStack(StackValue *head){
     if (head != NULL){
@@ -48,17 +54,19 @@ void freeStack(StackValue *head){
     }
 }
 
-void printS_(StackValue *s){
+void printS_(StackValue *s, int newline){
     if (s != NULL){
-        printf("%d, ", s->data);
+        printf("%d ", s->data);
         fflush(stdout);
-        printS_(s->next);
+        printS_(s->next, newline);
     } else {
-        printf("\b\n");
-        fflush(stdout);
+        if (newline){
+            printf("\n");
+            fflush(stdout);
+        }
     }
 }
 
-void printStack(StackValue *s){
-    printS_(s->next);
+void printStack(StackValue *s, int newline){
+    printS_(s->next, newline);
 }

@@ -16,7 +16,7 @@ struct Tile{
     int x, y, seen, created;
     struct Tile* links[4];
     struct Tile* creator;
-    int data;
+    StackValue *head;
 };
 
 Tile* newTile(void){
@@ -34,7 +34,7 @@ Tile* newTile(void){
     t->links[1] = NULL;
     t->links[2] = NULL;
     t->links[3] = NULL;
-    t->data = 0;
+    t->head = NULL;
     return t;
 }
 
@@ -168,10 +168,12 @@ void tileFree(Tile *t){
     }
     printf("freeing: ");
     printTile(t);
+    freeStack(t->head);
     free(t);
     t = NULL;
 }
 
 void printTile(Tile *t){
-    printf("addr: %p coords: (%d, %d)\tdata: %d\tstatus: %d\n", t, t->x, t->y, t->data, t->seen);
+    printf("addr: %p coords: (%d, %d)\tdata: ", t, t->x, t->y);
+    printStack(t->head, 1);
 }
