@@ -1,3 +1,4 @@
 *.bpkr
 
 *.out
+*.DS_Store

@@ -27,8 +27,14 @@ void push(StackValue *head, int new) {
     n->next = p;
     head->next = n;
 }
-/* frees 1 */
+
+/* frees 1
+ * FAIL SILENTLY... this is a design decision
+ */
 int pop(StackValue *head){
+    if (head->next == NULL){
+        return 0;
+    }
     StackValue *p, *c;
     int i;
     c = head->next;
@@ -39,6 +45,7 @@ int pop(StackValue *head){
     return i;
 }
 
+/* FAIL SILENTLY... this is a design decision */
 int peek(StackValue *head) {
     if (head->next != NULL) {
         return head->next->data;

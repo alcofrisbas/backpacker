@@ -34,7 +34,7 @@ Tile* newTile(void){
     t->links[1] = NULL;
     t->links[2] = NULL;
     t->links[3] = NULL;
-    t->head = NULL;
+    t->head = newStack();
     return t;
 }
 
@@ -100,8 +100,11 @@ void clean(Tile *t){
     }
 
 }
-/* for connecting to non-adjacent tiles
-this needs to be like bfs*/
+/*
+ * for connecting to non-adjacent tiles
+ * this needs to be like bfs
+ * TODO: do some heuristics...
+ */
 void connect(Tile *current, Tile *goal){
     if (current != NULL && ! current->seen) {
         current->seen = 1;
@@ -168,7 +171,9 @@ void tileFree(Tile *t){
     }
     printf("freeing: ");
     printTile(t);
-    freeStack(t->head);
+    if (t->head != NULL) {
+        freeStack(t->head);
+    }
     free(t);
     t = NULL;
 }

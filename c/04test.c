@@ -25,6 +25,9 @@ int main(void) {
 
     n = walk(n, 3);
     printf("%d\n", pop(n->head));
+    // for (int i=0; i<10;i ++){
+    //     pop(n->head);
+    // }
     tileFree(t);
     return 0;
 }
