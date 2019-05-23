@@ -13,14 +13,12 @@
 int main(void) {
     Tile *t = newTile();
     Tile *n;
-    t->head = newStack();
     push(t->head, 5);
     push(t->head, 5);
     push(t->head, 5);
     push(t->head, 6);
 
     n = walk(t, 0);
-    n->head = newStack();
     push(n->head, 10);
 
     n = walk(n, 3);
