@@ -169,8 +169,10 @@ void tileFree(Tile *t){
             tileFree(t->links[i]);
         }
     }
-    printf("freeing: ");
-    printTile(t);
+
+    /* for debugging */
+    // printf("freeing: ");
+    // printTile(t);
     if (t->head != NULL) {
         freeStack(t->head);
     }

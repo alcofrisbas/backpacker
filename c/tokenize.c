@@ -53,12 +53,12 @@ Tile *tokenize(Tile *inst, char *fname){
                     push(ptr->head, (int) ch);
                     push(ptr->head, KEY);
                     ptr = walk(ptr, 0);
-                    printf("%c",ch);
+                    // printf("%c",ch);
                 } else if (isValidSym(ch)) {
                     push(ptr->head, (int) ch);
                     push(ptr->head, SYM);
                     ptr = walk(ptr, 0);
-                    printf("%c",ch);
+                    // printf("%c",ch);
                 }
             } else if (isdigit(ch)) {
                 memset(num,0,INT_BUFF);
@@ -67,7 +67,7 @@ Tile *tokenize(Tile *inst, char *fname){
                     strcat(num, to_add);
                     ch = fgetc(fp);
                 }
-                printf("NUMER: %s\n", num);
+                // printf("NUMER: %s\n", num);
                 push(ptr->head, atoi(num));
                 push(ptr->head, NUM);
                 ptr = walk(ptr, 0);
@@ -77,6 +77,7 @@ Tile *tokenize(Tile *inst, char *fname){
     }
     else {
          printf("File open errrorrs\n");
+         exit(1);
     }
     //tileFree(inst);
     fclose (fp);
