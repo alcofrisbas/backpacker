@@ -18,7 +18,11 @@ struct Tile{
     struct Tile* creator;
     StackValue *head;
 };
-
+/*
+ * creates a new tile
+ * should probably make this
+ * nicer in the future...
+ */
 Tile* newTile(void){
     Tile *t;
     t  = malloc(sizeof(Tile));
@@ -37,7 +41,13 @@ Tile* newTile(void){
     t->head = newStack();
     return t;
 }
-
+/*
+ * connects two adjacent tiles.
+ * the creator link specifies
+ * method of non-dupe memory freeing
+ * and traces a path of creation along
+ * the map
+ */
 void connect_adjacent(Tile *t, Tile *s, int dir){
     t->links[dir] = s;
     s->links[3-dir] = t;
@@ -45,7 +55,7 @@ void connect_adjacent(Tile *t, Tile *s, int dir){
         s->creator = t;
     }
 }
-/* works */
+/* are two tiles connected? */
 int connected(Tile *t, Tile *s) {
     int i;
     for (i=0;i<4;i++){
@@ -55,26 +65,14 @@ int connected(Tile *t, Tile *s) {
     }
     return 0;
 }
+/* are two tiles adjacent? */
 int adjacent(Tile *t, Tile *s){
     if (abs((t->x+t->y)-(s->x+s->y)) == 1){
         return 1;
     }
     return 0;
 }
-
-// int direction(Tile *t, Tile *s){
-//     if (t->x > s->x){
-//         return 1;
-//     }if (t->x < s->x){
-//         return 2;
-//     }if (t->y > s->y){
-//         return 0;
-//     }if (t->y < s->y){
-//         return 3;
-//     }
-//     return 0;
-// }
-
+/* is a tile only connected at one place? */
 int deadEnd(Tile *t){
     int i,j;
     j=0;
@@ -88,7 +86,11 @@ int deadEnd(Tile *t){
     }
     return 0;
 }
-
+/* sets all tiles to unseen
+ * there may be a less clumsy way of doing this,
+ * but that's okay.
+ * TODO: use the creation links...
+ */
 void clean(Tile *t){
     if (t != NULL && t->seen){
         t->seen = 0;
@@ -102,8 +104,9 @@ void clean(Tile *t){
 }
 /*
  * for connecting to non-adjacent tiles
- * this needs to be like bfs
+ * uses bfs
  * TODO: do some heuristics...
+ * like 3 limit search...
  */
 void connect(Tile *current, Tile *goal){
     if (current != NULL && ! current->seen) {
@@ -127,6 +130,11 @@ void connect(Tile *current, Tile *goal){
     }
 }
 
+/*
+ * navigates to the tile in direction dir
+ * if no tile exists there, it creates a
+ * new tile
+ */
 Tile* walk(Tile *t, int dir) {
     Tile* next;
     if (t->links[dir] != NULL) {
@@ -159,10 +167,24 @@ Tile* walk(Tile *t, int dir) {
     return next;
 }
 
-void printTile(Tile *t);
+/*
+ * determines whether or not a tile
+ * exists in the direction specified
+ */
+int look(Tile *t, int dir){
+    if (t->links[dir] != NULL)
+        return 1;
+    return 0;
+}
 
+/*stubby*/
+void printTile(Tile *t);
+/*
+ * frees tiles along creation links
+ */
 void tileFree(Tile *t){
     int i;
+    printTile(t);
     for(i=0;i<4;i++){
         if (t->links[i]!= NULL && t->links[i]->creator==t){
             t->links[i]->links[3-i] = NULL;
@@ -179,8 +201,50 @@ void tileFree(Tile *t){
     free(t);
     t = NULL;
 }
-
+/*
+ * prints the tile information for debugging
+ * purposes
+ */
 void printTile(Tile *t){
     printf("addr: %p coords: (%d, %d)\tdata: ", t, t->x, t->y);
     printStack(t->head, 1);
 }
+
+// void getBounds(Tile *t, int bounds[4]){
+//     if (t != NULL && !t->seen){
+//         t->seen = 1;
+//         if (t->x < bounds[0])
+//             bounds[0] = t->x;
+//         if (t->x > bounds[1])
+//             bounds[1] = t->x;
+//         if (t->y < bounds[2])
+//             bounds[2] = t->y;
+//         if (t->y > bounds[3])
+//             bounds[3] = t->y;
+//         int i;
+//         for(i=0;i<4;i++){
+//             getBounds(t->links[i], bounds);
+//         }
+//     }
+// }
+//
+// void fillMap(Tile *t, int map[][]){
+//
+// }
+//
+// void printMap(Tile *m){
+//     /* find bounds */
+//     Tile *t = m;
+//     clean(t);
+//     int bounds[4] = { 0 };
+//     getBounds(t, bounds);
+//     for(int i=0;i<4;i++){
+//         printf("%d ", bounds[i]);
+//     }printf("\n");
+//     int map[(bounds[1]-bounds[0])*2][(bounds[3]-bounds[2])*2];
+//     fillMap(m, map);
+//
+//     clean(t);
+//
+//
+// }

@@ -3,9 +3,6 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "stack.c"
-#include "tile.c"
-
 #define KEY 0
 #define SYM 1
 #define NUM 2
@@ -84,14 +81,4 @@ Tile *tokenize(Tile *inst, char *fname){
     return inst;
 }
 
-int main(int argc, char **argv){
-    Tile *t, *n;
-    t = tokenize(t, argv[1]);
-    n = t;
-    while ( n->links[0] != NULL) {
-        printTile(n);
-        n = n->links[0];
-    }
-    tileFree(t);
-    return 0;
-}
+
