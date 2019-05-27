@@ -11,7 +11,7 @@
 #define NUM 2
 #define INT_BUFF 10
 
-const char* validKeys = "wasdlpc\n";
+const char* validKeys = "wasdlptecrg\nv^fmhxkuz";
 const char* validSyms = ".?";
 
 int isValidKey(char ch){
@@ -85,8 +85,13 @@ Tile *tokenize(Tile *inst, char *fname){
 }
 
 int main(int argc, char **argv){
-    Tile *t;
+    Tile *t, *n;
     t = tokenize(t, argv[1]);
+    n = t;
+    while ( n->links[0] != NULL) {
+        printTile(n);
+        n = n->links[0];
+    }
     tileFree(t);
     return 0;
 }
