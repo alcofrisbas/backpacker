@@ -80,5 +80,3 @@ Tile *tokenize(Tile *inst, char *fname){
     fclose (fp);
     return inst;
 }
-
-

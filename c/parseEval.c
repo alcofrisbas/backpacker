@@ -4,11 +4,13 @@
 #include <string.h>
 
 
+
 void parseEval(Tile *tknList){
     int x = 0;
     Tile *n = tknList;
     Tile *o = newTile();
     Tile *p = o;
+    StackValue *s = newStack();
     while ( n->links[0] != NULL) {
         //printf("%d\n", peek(n->head));
         if(peek(n->head) == 0){
@@ -39,4 +41,5 @@ void parseEval(Tile *tknList){
         x += 1;
     }
     tileFree(o);
+    freeStack(s);
 }
