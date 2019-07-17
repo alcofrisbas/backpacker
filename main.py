@@ -27,11 +27,10 @@ def tokenize(s, debug=False):
 		elif char == ".":
 			#l.append(Token("DOT",char))
 			if x < len(s)-1:
-				if s[x+1].isdigit():
+				if s[x+1].isdigit() or s[x+1] == "?":
 					l.append(Token("DOT", char))
 				else:
 					l.append(Token("STOP", char))
-		# this is no implemented yet.
 		elif char == "?":
 			l.append(Token("STAR", 0))
 		elif char.isdigit():
@@ -48,6 +47,12 @@ def tokenize(s, debug=False):
 		for i in l:
 			print(i)
 	return l
+
+def getStar(backpack):
+	if backpack:
+		return backpack[-1]
+	else:
+		return 0
 
 """
 Parse and evaluate a list of tokens
@@ -79,7 +84,10 @@ def parseEval(l, location, backpack, ground,x):
 			times = l[x+1]
 			if times.t not in ["N", "STAR"]:
 				continue
-			times = int(l[x+1].v)
+			if times.t == "STAR":
+				times = getStar(backpack)
+			else:
+				times = int(l[x+1].v)
 			y = x+1
 			# get code to execute
 			while y < len(l) and loop > 0:
@@ -131,24 +139,28 @@ def parseEval(l, location, backpack, ground,x):
 				x += 1
 				if x >= len(l):
 					continue
-				if l[x].t not in ["N", "STAR"]:
-					p = 1
-				else:
+				if l[x].t == "N":
 					p = int(l[x].v) + 1
+				elif l[x].t == "STAR":
+					p = getStar(backpack)
+				else:
+					p = 1
 				for i in range(p):
 					while l[x].v != "\n":
 						x += 1
 					x += 1
 				x -= 1
-			# jump down
+			# jump up
 			elif w.v == "^":
 				x += 1
 				if x >= len(l):
 					continue
-				if l[x].t not in ["N", "STAR"]:
-					p = 1
-				else:
+				if l[x].t == "N":
 					p = int(l[x].v) + 1
+				elif l[x].t == "STAR":
+					p = getStar(backpack)
+				else:
+					p = 1
 				for i in range(int(l[x].v)+1):
 					while x > 0 and l[x].v != "\n":
 						x -= 1
@@ -159,7 +171,7 @@ def parseEval(l, location, backpack, ground,x):
 				if ground.get("{},{}".format(str(location[0]),str(location[1])),False):
 					try:
 						p = ground["{},{}".format(str(location[0]),str(location[1]))].pop()
-						backpack.append(p)
+						backpack.append(int(p))
 					except:
 						pass
 			# print 1
@@ -270,7 +282,9 @@ def parseEval(l, location, backpack, ground,x):
 					while len(ground["{},{}".format(str(location[0]),str(location[1]))]) > 0:
 						y = ground["{},{}".format(str(location[0]),str(location[1]))].pop()
 			else:
-				pass
+				if debug:
+					print("skipped: ")
+					print(w)
 		x += 1
 		#print(w.v, ground)
 
