@@ -31,8 +31,9 @@ def tokenize(s, debug=False):
 					l.append(Token("DOT", char))
 				else:
 					l.append(Token("STOP", char))
+		# this is no implemented yet.
 		elif char == "?":
-			l.appent(Token("STAR", 0))
+			l.append(Token("STAR", 0))
 		elif char.isdigit():
 			n = char
 			x += 1
