@@ -139,3 +139,9 @@ The reason why this function is questionable is because of how 'variables' work 
 Using common sense, I gave ```hf``` 4 stacks north and south of home and reserved the stacks directly to the east and west for ```f```'s computation. A polite program does this. It is conscientious to respect boundaries, even if you can step right over them.
 
 However, on first glance, this implementation steps over minor boundaries. Each it's called, ```f``` looks at variables that ```hf```  originally initiated, information 'owned' by ```hf```. This is a violation! Well, actually, it's not. The recursive method of generating the fibonacci sequence uses parameters. This apparent breach of privacy is actually just ```f``` taking the previous two fibonacci numbers and a counter, just like any other recursive implementation of the fibonacci sequence.
+
+### More flow controls
+
+a ```.```(dot) followed by a number ```n``` will repeat code ```n``` times until the next dot. ```.5p101lt.p10lt``` will write 5 ```e```s to the terminal. 
+
+The symbol ```?``` peeks the the top item in the backpack. If the backpack is empty ```?``` evaluates to 0.  ```p5l.?p101lt.p10lt``` will also write 5 ```e```s to the terminal.
