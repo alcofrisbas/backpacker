@@ -113,31 +113,7 @@ h
 
 ### (Tail)Recursion
 
-Using ```x```, a file can call itself, but issues arise if the recursion needs a conditional stop; any variables created in a file will be re-created when it is called again. Using a helper file for this purpose is pretty useful. See the following code, which prompts the user for a number, then prints out the first n numbers in the fibonacci sequence using a function that calls itself.
-
-hf.bpkr
-```
-wap1dp0ssamp v0 INITIATE CONDITIONAL VALUES AND ITERATOR
-hap0ddp1     v0 SETUP FIB
-hp102lx      v0 CALL F
-```
-f.bpkr
-```
-hwlcssalcpfv6 v0 CHECK CONDITIIONAL
-hwalcdck      v0INCREMENT COUNTER
-hp10lalcp0lelcddckh v0 PRINT AND ADD(QUASI N-TWO)
-wlcssalcpfv3  v0 CHECK CONDITIIONAL
-hwalcdck      v0 INCREMENT COUNTER
-hp10ldlcp0lelcaackh v0 PRINT AND ADD(QUASI N-ONE)
-p102lx v0 PRINT HI & CALL SELF
-
-```
-
-The reason why this function is questionable is because of how 'variables' work in backpacker. A good way to create a variable is to pick a location and stockpile integers there, just like a squirrel in fall. Then, when the information is needed again, the backpacker can go to that location and access it. The consequence of this is that there is no scope whatsoever.
-
-Using common sense, I gave ```hf``` 4 stacks north and south of home and reserved the stacks directly to the east and west for ```f```'s computation. A polite program does this. It is nice to respect boundaries, even if you can step right over them.
-
-However, on first glance, this implementation steps over minor boundaries. Each it's called, ```f``` looks at variables that ```hf```  originally initiated, information 'owned' by ```hf```. This is a violation! Well, actually, it's not. The recursive method of generating the fibonacci sequence uses parameters. This apparent breach of privacy is actually just ```f``` taking the previous two fibonacci numbers and a counter, just like any other recursive implementation of the fibonacci sequence.
+Using ```x```, a file can call itself, but issues arise if the recursion needs a conditional stop; any variables created in a file will be re-created when it is called again. Using a helper file for this purpose is pretty useful. 
 
 ### More flow controls
 
