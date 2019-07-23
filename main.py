@@ -1,5 +1,7 @@
 import sys
-
+"""
+keep track of type and value
+"""
 class Token:
     def __init__(self,t, v):
         self.t = t
@@ -7,6 +9,9 @@ class Token:
     def __str__(self):
         return "{}\t{}".format(self.t, self.v)
 
+"""
+tokenizes, parses, and evals source code
+"""
 class Interpreter:
     def __init__(self):
         self.s = ""
@@ -17,22 +22,32 @@ class Interpreter:
         self.backpack = []
         self.earth = {}
         self.ptr = 0
-
+    """
+    evaluate source code
+    """
     def evaluate(self):
         self.parseEval(self.l, 0,0)
         if self.debug:
             print(self.earth)
             print(self.backpack)
 
+    """
+    set main source code to string
+    """
     def setS(self, s):
         self.s = s
 
     def setDebug(self, d):
         self.debug = d
-
+    """
+    tokenize main text
+    """
     def tokenize_text(self):
         self.tokenize(self.s)
 
+    """
+    tokenize text -- either main or function text
+    """
     def tokenize(self, s, fn=False):
         x = 0
         l = []
@@ -67,16 +82,26 @@ class Interpreter:
             return
         return l
 
+    """
+    see whether a spot exists on a given coordinate
+    - no list: False
+    - empty or full list: True
+    """
     def exists(self):
         if isinstance(self.earth.get("{},{}".format(str(self.location[0]),str(self.location[1])),False), list):
             return True
         return False
 
-
+    """
+    create a list on ground
+    """
     def make(self):
         if not self.exists():
             self.earth["{},{}".format(str(self.location[0]),str(self.location[1]))] = []
 
+    """
+    put item onto ground
+    """
     def put(self, p):
         self.make()
         self.ground().append(p)
@@ -99,6 +124,12 @@ class Interpreter:
             return None
         return self.backpack.pop()
 
+    """
+    recursively parse and evaluate source code
+    Still am debating about overall structure of this
+    code: should i not fully recurse -- ie hybrid while and
+    recursion? that will be iteration 1.1
+    """
     def parseEval(self, l, ptr, loop):
         if ptr >= len(l):
             return
@@ -126,6 +157,7 @@ class Interpreter:
             return self.parseEval(l, ptr+1, loop)
 
         if w.t == "KEY":
+            # movement
             if w.v == "w":
                 self.location[1] = self.location[1]+1
                 return self.parseEval(l, ptr+1, loop)
@@ -143,6 +175,7 @@ class Interpreter:
                 self.location[1] = 0
                 return self.parseEval(l, ptr+1, loop)
 
+            # put on ground from numerical argument or backpack
             elif w.v == "p":
                 ptr += 1
                 if ptr < len(l):
@@ -156,13 +189,13 @@ class Interpreter:
                     if self.backpack:
                         self.ground().append(self.backpack.pop())
                 return self.parseEval(l, ptr+1, loop)
-
+            # pick up item from ground and put into bag
             elif w.v == "l":
                 r = self.retrieve()
                 if r:
                     self.backpack.append(r)
                 return self.parseEval(l, ptr+1, loop)
-
+            # empty bag onto stdout
             elif w.v == "e":
                 while len(self.backpack) > 0:
                     c = self.backpack.pop()
@@ -173,10 +206,10 @@ class Interpreter:
                             c = self.backpack.pop()
                             sys.stdout.write(str(int(c)))
                         except:
-                            sys.stdout.write("0")
+                            pass
                     sys.stdout.flush()
                 return self.parseEval(l, ptr+1, loop)
-
+            # empty item onto stdout
             elif w.v == "t":
                 if self.backpack:
                     c = self.backpack.pop()
@@ -187,15 +220,15 @@ class Interpreter:
                             c = self.backpack.pop()
                             sys.stdout.write(str(int(c)))
                         except:
-                            sys.stdout.write("0")
+                            pass
                     sys.stdout.flush()
                 return self.parseEval(l, ptr+1, loop)
-
+            # empty bag onto the ground
             elif w.v == "g":
                 while len(self.backpack) > 0:
                     self.put()
                 return self.parseEval(l, ptr+1, loop)
-
+            # jump down n lines
             elif w.v == "v":
                 ptr += 1
                 if ptr >= len(l):
@@ -203,15 +236,14 @@ class Interpreter:
                 n = self.parseEval([l[ptr]], 0, loop)
                 if not n:
                     n = 1
-                    print("BADNESS")
                 n = int(n)
                 for i in range(n+1):
-                    while l[ptr].v != "\n" and ptr < len(l):
+                    while ptr < len(l) and l[ptr].v != "\n" :
                         ptr += 1
                     ptr+=1
                     n -= 1
                 return self.parseEval(l, ptr, loop)
-
+            # jump up n lines
             elif w.v == "^":
                 ptr += 1
                 if ptr >= len(l):
@@ -245,22 +277,22 @@ class Interpreter:
                 return self.parseEval(l, ptr, loop)
 
             # =======================================
-
+            # combine elements: backpack element is NOT
+            # consumed
             elif w.v == "c":
-                p = self.getBag()
-                if not p:
+                if self.backpack:
+                    p = self.backpack[-1]
+                else:
                     p = 0
                 p = int(p)
                 s = self.retrieve()
-                self.put(s)
                 if not s:
                     s = 0
                 s = int(s)
-                print(s+p)
                 self.ground().append(str(s+p))
 
                 return self.parseEval(l, ptr+1, loop)
-
+            # subtract. backpack element IS consumed
             elif w.v == "r":
                 p = self.getBag()
                 if not p:
@@ -273,7 +305,7 @@ class Interpreter:
                 self.ground().append(str(max(s-p,0)))
 
                 return self.parseEval(l, ptr+1, loop)
-
+            # input number from stdin
             elif w.v == "m":
                 s = input("")
                 try:
@@ -282,7 +314,7 @@ class Interpreter:
                 except:
                     pass
                 self.parseEval(l, ptr+1, loop)
-
+            # execute filename in backpack
             elif w.v == "x":
                 fn = ""
                 while len(self.backpack) > 0:
@@ -294,7 +326,7 @@ class Interpreter:
                 self.parseEval(tkns, 0, loop)
 
                 return self.parseEval(l, ptr+1, loop)
-
+            # input file in backpack to ground
             elif w.v == "I":
                 fn = ""
                 while len(self.backpack) > 0:
@@ -309,7 +341,7 @@ class Interpreter:
                     pass
                 return self.parseEval(l, ptr+1, loop)
 
-
+            # write ground to file in backpack
             elif w.v == "O":
                 fn = ""
                 while len(self.backpack) > 0:
@@ -324,11 +356,12 @@ class Interpreter:
 
                 return self.parseEval(l, ptr+1, loop)
 
+            # go home
             elif w.v == "h":
                 self.location[0] = 0
                 self.location[1] = 0
                 return self.parseEval(l, ptr+1, loop)
-
+            # go to location in backpack
             elif w.v == "G":
                 if len(self.ground()) >= 2:
                     loc = self.ground()
