@@ -30,6 +30,9 @@ class Interpreter:
     def setDebug(self, d):
         self.debug = d
 
+    def tokenize_text(self):
+        self.tokenize(self.s)
+
     def tokenize(self, s, fn=False):
         x = 0
         l = []
@@ -63,21 +66,15 @@ class Interpreter:
             self.l = l
             return
         return l
-    ''' behavior:
-        - no key: false
-        - empty list: true
-        - non-empty list: true
-    '''
+
     def exists(self):
         if isinstance(self.earth.get("{},{}".format(str(self.location[0]),str(self.location[1])),False), list):
             return True
-        print(self.earth.get("{},{}".format(str(self.location[0]),str(self.location[1]))))
         return False
 
 
     def make(self):
         if not self.exists():
-            print("making")
             self.earth["{},{}".format(str(self.location[0]),str(self.location[1]))] = []
 
     def put(self, p):
@@ -85,6 +82,7 @@ class Interpreter:
         self.ground().append(p)
 
     # return 'stack' on which ptr is standing
+    # BUG: not sure but returns empty on 2nd call...
     def ground(self):
         self.make()
         return self.earth["{},{}".format(str(self.location[0]),str(self.location[1]))]
@@ -114,21 +112,17 @@ class Interpreter:
                 return self.backpack[-1]
             else:
                 return "0"
-        # TODO: implement me
         if w.t == "DOT":
             ptr += 1
             n = self.parseEval([l[ptr]], 0, loop)
-            # print(n)
             if n:
                 ptr += 1
-                # ptr2 = ptr
                 l2 = []
                 while l[ptr].t != "STOP":
                     l2.append(l[ptr])
                     ptr += 1
                 for i in range(int(n)):
                     self.parseEval(l2, 0, loop)
-            # print(l[ptr+1].v)
             return self.parseEval(l, ptr+1, loop)
 
         if w.t == "KEY":
@@ -152,17 +146,13 @@ class Interpreter:
             elif w.v == "p":
                 ptr += 1
                 if ptr < len(l):
-                    # print(l[ptr])
                     n = self.parseEval([l[ptr]], 0, loop)
                     if n:
-                        print("from num")
                         self.ground().append(n)
                     else:
-                        print("from bag")
                         if self.backpack:
                             self.ground().append(self.backpack.pop())
                 else:
-                    print("from bag 2")
                     if self.backpack:
                         self.ground().append(self.backpack.pop())
                 return self.parseEval(l, ptr+1, loop)
@@ -171,11 +161,9 @@ class Interpreter:
                 r = self.retrieve()
                 if r:
                     self.backpack.append(r)
-                # print(l[ptr+1])
                 return self.parseEval(l, ptr+1, loop)
 
             elif w.v == "e":
-                print("printing all")
                 while len(self.backpack) > 0:
                     c = self.backpack.pop()
                     if int(c) != 0:
@@ -264,6 +252,7 @@ class Interpreter:
                     p = 0
                 p = int(p)
                 s = self.retrieve()
+                self.put(s)
                 if not s:
                     s = 0
                 s = int(s)
@@ -357,9 +346,8 @@ if __name__ == '__main__':
     interpreter = Interpreter()
     with open(sys.argv[1]) as r:
         text = r.read()
-    # print(text)
     interpreter.setS(text)
     if len(sys.argv) > 2 and sys.argv[2] == "d":
         interpreter.setDebug(True)
-    interpreter.tokenize(interpreter.s)
+    interpreter.tokenize_text()
     interpreter.evaluate()
