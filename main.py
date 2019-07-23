@@ -229,13 +229,14 @@ class Interpreter:
                     self.put()
                 return self.parseEval(l, ptr+1, loop)
             # jump down n lines
+            # TODO: handle no number after jump
             elif w.v == "v":
                 ptr += 1
                 if ptr >= len(l):
                     return
                 n = self.parseEval([l[ptr]], 0, loop)
                 if not n:
-                    n = 1
+                    n = 0
                 n = int(n)
                 for i in range(n+1):
                     while ptr < len(l) and l[ptr].v != "\n" :
@@ -244,14 +245,14 @@ class Interpreter:
                     n -= 1
                 return self.parseEval(l, ptr, loop)
             # jump up n lines
+            # TODO: handle no number after jump
             elif w.v == "^":
                 ptr += 1
                 if ptr >= len(l):
                     return
                 n = self.parseEval([l[ptr]], 0, loop)
                 if not n:
-                    n = 1
-                    print("UP BADDNESS")
+                    n = 0
                 n = int(n)
                 for i in range(n+1):
                     while l[ptr].v != "\n" and ptr > 0:
@@ -376,6 +377,7 @@ class Interpreter:
 
 
 if __name__ == '__main__':
+    # TODO: Better cli -- this does for now
     interpreter = Interpreter()
     with open(sys.argv[1]) as r:
         text = r.read()
