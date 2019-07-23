@@ -61,7 +61,7 @@ termination.
 The main goal is to respond to errors by doing absolutely nothing.
 Characters that are neither numbers or commands are ignored and
 can be used as comments
-commands: w a s d f e t l p c r g v ^ m x k u z h
+commands: w a s d f e t l p c r g v ^ m x k u z h I
 """
 def setup():
 	location = [0,0]
@@ -281,6 +281,14 @@ def parseEval(l, location, backpack, ground,x):
 				else:
 					while len(ground["{},{}".format(str(location[0]),str(location[1]))]) > 0:
 						y = ground["{},{}".format(str(location[0]),str(location[1]))].pop()
+			elif w.v == "I":
+				lst = []
+				while len(backpack) > 0:
+					lst.append(backpack.pop())
+				lst = [chr(int(i)) for i in lst]
+				fname = "".join(lst)
+				with open(fname) as r:
+					pass
 			else:
 				if debug:
 					print("skipped: ")
