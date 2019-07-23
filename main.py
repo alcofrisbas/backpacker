@@ -152,26 +152,20 @@ class Interpreter:
                         ptr += 1
                     for i in range(int(n)):
                         self.parseEval(l2, 0, loop)
-                # return self.parseEval(l, ptr+1, loop)
 
             if w.t == "KEY":
                 # movement
                 if w.v == "w":
                     self.location[1] = self.location[1]+1
-                    # return self.parseEval(l, ptr+1, loop)
                 elif w.v == "s":
                    self.location[1] = self.location[1]-1
-                   # return self.parseEval(l, ptr+1, loop)
                 elif w.v == "d":
                     self.location[0] = self.location[0]+1
-                    # return self.parseEval(l, ptr+1, loop)
                 elif w.v == "a":
                     self.location[0] = self.location[0]-1
-                    # return self.parseEval(l, ptr+1, loop)
                 elif w.v == "h":
                     self.location[0] = 0
                     self.location[1] = 0
-                    # return self.parseEval(l, ptr+1, loop)
 
                 # put on ground from numerical argument or backpack
                 elif w.v == "p":
@@ -186,13 +180,13 @@ class Interpreter:
                     else:
                         if self.backpack:
                             self.ground().append(self.backpack.pop())
-                    # return self.parseEval(l, ptr+1, loop)
+
                 # pick up item from ground and put into bag
                 elif w.v == "l":
                     r = self.retrieve()
                     if r:
                         self.backpack.append(r)
-                    # return self.parseEval(l, ptr+1, loop)
+
                 # empty bag onto stdout
                 elif w.v == "e":
                     while len(self.backpack) > 0:
@@ -206,7 +200,6 @@ class Interpreter:
                             except:
                                 pass
                         sys.stdout.flush()
-                    # return self.parseEval(l, ptr+1, loop)
                 # empty item onto stdout
                 elif w.v == "t":
                     if self.backpack:
@@ -220,13 +213,11 @@ class Interpreter:
                             except:
                                 pass
                         sys.stdout.flush()
-                    # return self.parseEval(l, ptr+1, loop)
 
                 # empty bag onto the ground
                 elif w.v == "g":
                     while len(self.backpack) > 0:
                         self.put(self.backpack.pop())
-                    # return self.parseEval(l, ptr+1, loop)
 
                 # jump down n lines
                 # TODO: handle no number after jump
@@ -244,7 +235,7 @@ class Interpreter:
                         ptr+=1
                         n -= 1
                     ptr-=1
-                    # return self.parseEval(l, ptr, loop)
+
                 # jump up n lines
                 # TODO: handle no number after jump
                 elif w.v == "^":
@@ -260,23 +251,19 @@ class Interpreter:
                             ptr -= 1
                         n -= 1
                         ptr-=1
-                    # return self.parseEval(l, ptr+1, loop)
 
 
                 # ===== conditionals ======
 
                 elif w.v == "f":
                     if self.getBag() != self.retrieve():
-                        while l[ptr].v != "\n":
+                        while ptr < len(l) and l[ptr].v != "\n":
                             ptr += 1
-                    # return self.parseEval(l, ptr+1, loop)
 
                 elif w.v == "u":
                     if self.exists and len(self.ground()) > 0:
                         while l[ptr].v != "\n" and ptr < len(l):
                             ptr += 1
-                    # ptr
-                    # return self.parseEval(l, ptr, loop)
 
                 # =======================================
                 # combine elements: backpack element is NOT
@@ -293,7 +280,6 @@ class Interpreter:
                     s = int(s)
                     self.ground().append(str(s+p))
 
-                    # return self.parseEval(l, ptr+1, loop)
                 # subtract. backpack element IS consumed
                 elif w.v == "r":
                     p = self.getBag()
@@ -306,7 +292,6 @@ class Interpreter:
                     s = int(s)
                     self.ground().append(str(max(s-p,0)))
 
-                    # return self.parseEval(l, ptr+1, loop)
                 # input number from stdin
                 elif w.v == "m":
                     s = input("")
@@ -315,7 +300,6 @@ class Interpreter:
                         self.backpack.append(s)
                     except:
                         pass
-                    # self.parseEval(l, ptr+1, loop)
                 # execute filename in backpack
                 elif w.v == "x":
                     fn = ""
@@ -327,7 +311,6 @@ class Interpreter:
                     tkns = self.tokenize(text, fn=True)
                     self.parseEval(tkns, 0, loop)
 
-                    # return self.parseEval(l, ptr+1, loop)
                 # input file in backpack to ground
                 elif w.v == "I":
                     fn = ""
@@ -341,7 +324,6 @@ class Interpreter:
                                self.ground().append(ord(t))
                     except:
                         pass
-                    # return self.parseEval(l, ptr+1, loop)
 
                 # write ground to file in backpack
                 elif w.v == "O":
@@ -356,7 +338,6 @@ class Interpreter:
                     except:
                         pass
 
-                    # return self.parseEval(l, ptr+1, loop)
 
                 # go to location in backpack
                 elif w.v == "G":
@@ -364,9 +345,10 @@ class Interpreter:
                         loc = self.ground()
                         self.location[1] = loc.pop()
                         self.location[0] = loc.pop()
-                    # return self.parseEval(l, ptr+1, loop)
 
-
+                # kill the bag
+                elif w.v == "k":
+                    self.backpack.clear()
                 else:
                     pass
             ptr+=1
