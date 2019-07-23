@@ -125,254 +125,251 @@ class Interpreter:
         return self.backpack.pop()
 
     """
-    recursively parse and evaluate source code
-    Still am debating about overall structure of this
-    code: should i not fully recurse -- ie hybrid while and
-    recursion? that will be iteration 1.1
+    iteratively and recursively parse and evaluate source code
     """
     def parseEval(self, l, ptr, loop):
-        if ptr >= len(l):
-            return
-        w = l[ptr]
-        if w.t == "NUM":
-            ptr += 1
-            return w.v
-        if w.t == "STAR":
-            ptr += 1
-            if self.backpack:
-                return self.backpack[-1]
-            else:
-                return "0"
-        if w.t == "DOT":
-            ptr += 1
-            n = self.parseEval([l[ptr]], 0, loop)
-            if n:
+        while ptr < len(l):
+            if ptr >= len(l):
+                return
+            w = l[ptr]
+            if w.t == "NUM":
                 ptr += 1
-                l2 = []
-                while l[ptr].t != "STOP":
-                    l2.append(l[ptr])
+                return w.v
+            if w.t == "STAR":
+                ptr += 1
+                if self.backpack:
+                    return self.backpack[-1]
+                else:
+                    return "0"
+            if w.t == "DOT":
+                ptr += 1
+                n = self.parseEval([l[ptr]], 0, loop)
+                if n:
                     ptr += 1
-                for i in range(int(n)):
-                    self.parseEval(l2, 0, loop)
-            return self.parseEval(l, ptr+1, loop)
+                    l2 = []
+                    while l[ptr].t != "STOP":
+                        l2.append(l[ptr])
+                        ptr += 1
+                    for i in range(int(n)):
+                        self.parseEval(l2, 0, loop)
+                # return self.parseEval(l, ptr+1, loop)
 
-        if w.t == "KEY":
-            # movement
-            if w.v == "w":
-                self.location[1] = self.location[1]+1
-                return self.parseEval(l, ptr+1, loop)
-            elif w.v == "s":
-               self.location[1] = self.location[1]-1
-               return self.parseEval(l, ptr+1, loop)
-            elif w.v == "d":
-                self.location[0] = self.location[0]+1
-                return self.parseEval(l, ptr+1, loop)
-            elif w.v == "a":
-                self.location[0] = self.location[0]-1
-                return self.parseEval(l, ptr+1, loop)
-            elif w.v == "h":
-                self.location[0] = 0
-                self.location[1] = 0
-                return self.parseEval(l, ptr+1, loop)
+            if w.t == "KEY":
+                # movement
+                if w.v == "w":
+                    self.location[1] = self.location[1]+1
+                    # return self.parseEval(l, ptr+1, loop)
+                elif w.v == "s":
+                   self.location[1] = self.location[1]-1
+                   # return self.parseEval(l, ptr+1, loop)
+                elif w.v == "d":
+                    self.location[0] = self.location[0]+1
+                    # return self.parseEval(l, ptr+1, loop)
+                elif w.v == "a":
+                    self.location[0] = self.location[0]-1
+                    # return self.parseEval(l, ptr+1, loop)
+                elif w.v == "h":
+                    self.location[0] = 0
+                    self.location[1] = 0
+                    # return self.parseEval(l, ptr+1, loop)
 
-            # put on ground from numerical argument or backpack
-            elif w.v == "p":
-                ptr += 1
-                if ptr < len(l):
-                    n = self.parseEval([l[ptr]], 0, loop)
-                    if n:
-                        self.ground().append(n)
+                # put on ground from numerical argument or backpack
+                elif w.v == "p":
+                    ptr += 1
+                    if ptr < len(l):
+                        n = self.parseEval([l[ptr]], 0, loop)
+                        if n:
+                            self.ground().append(n)
+                        else:
+                            if self.backpack:
+                                self.ground().append(self.backpack.pop())
                     else:
                         if self.backpack:
                             self.ground().append(self.backpack.pop())
-                else:
+                    # return self.parseEval(l, ptr+1, loop)
+                # pick up item from ground and put into bag
+                elif w.v == "l":
+                    r = self.retrieve()
+                    if r:
+                        self.backpack.append(r)
+                    # return self.parseEval(l, ptr+1, loop)
+                # empty bag onto stdout
+                elif w.v == "e":
+                    while len(self.backpack) > 0:
+                        c = self.backpack.pop()
+                        if int(c) != 0:
+                            sys.stdout.write(chr(int(c)))
+                        else:
+                            try:
+                                c = self.backpack.pop()
+                                sys.stdout.write(str(int(c)))
+                            except:
+                                pass
+                        sys.stdout.flush()
+                    # return self.parseEval(l, ptr+1, loop)
+                # empty item onto stdout
+                elif w.v == "t":
                     if self.backpack:
-                        self.ground().append(self.backpack.pop())
-                return self.parseEval(l, ptr+1, loop)
-            # pick up item from ground and put into bag
-            elif w.v == "l":
-                r = self.retrieve()
-                if r:
-                    self.backpack.append(r)
-                return self.parseEval(l, ptr+1, loop)
-            # empty bag onto stdout
-            elif w.v == "e":
-                while len(self.backpack) > 0:
-                    c = self.backpack.pop()
-                    if int(c) != 0:
-                        sys.stdout.write(chr(int(c)))
-                    else:
-                        try:
-                            c = self.backpack.pop()
-                            sys.stdout.write(str(int(c)))
-                        except:
-                            pass
-                    sys.stdout.flush()
-                return self.parseEval(l, ptr+1, loop)
-            # empty item onto stdout
-            elif w.v == "t":
-                if self.backpack:
-                    c = self.backpack.pop()
-                    if int(c) != 0:
-                        sys.stdout.write(chr(int(c)))
-                    else:
-                        try:
-                            c = self.backpack.pop()
-                            sys.stdout.write(str(int(c)))
-                        except:
-                            pass
-                    sys.stdout.flush()
-                return self.parseEval(l, ptr+1, loop)
-            # empty bag onto the ground
-            elif w.v == "g":
-                while len(self.backpack) > 0:
-                    self.put()
-                return self.parseEval(l, ptr+1, loop)
-            # jump down n lines
-            # TODO: handle no number after jump
-            elif w.v == "v":
-                ptr += 1
-                if ptr >= len(l):
-                    return
-                n = self.parseEval([l[ptr]], 0, loop)
-                if not n:
-                    n = 0
-                n = int(n)
-                for i in range(n+1):
-                    while ptr < len(l) and l[ptr].v != "\n" :
-                        ptr += 1
-                    ptr+=1
-                    n -= 1
-                return self.parseEval(l, ptr, loop)
-            # jump up n lines
-            # TODO: handle no number after jump
-            elif w.v == "^":
-                ptr += 1
-                if ptr >= len(l):
-                    return
-                n = self.parseEval([l[ptr]], 0, loop)
-                if not n:
-                    n = 0
-                n = int(n)
-                for i in range(n+1):
-                    while l[ptr].v != "\n" and ptr > 0:
-                        ptr -= 1
-                    n -= 1
+                        c = self.backpack.pop()
+                        if int(c) != 0:
+                            sys.stdout.write(chr(int(c)))
+                        else:
+                            try:
+                                c = self.backpack.pop()
+                                sys.stdout.write(str(int(c)))
+                            except:
+                                pass
+                        sys.stdout.flush()
+                    # return self.parseEval(l, ptr+1, loop)
+
+                # empty bag onto the ground
+                elif w.v == "g":
+                    while len(self.backpack) > 0:
+                        self.put(self.backpack.pop())
+                    # return self.parseEval(l, ptr+1, loop)
+
+                # jump down n lines
+                # TODO: handle no number after jump
+                elif w.v == "v":
+                    ptr += 1
+                    if ptr >= len(l):
+                        return
+                    n = self.parseEval([l[ptr]], 0, loop)
+                    if not n:
+                        n = 0
+                    n = int(n)
+                    for i in range(n+1):
+                        while ptr < len(l) and l[ptr].v != "\n" :
+                            ptr += 1
+                        ptr+=1
+                        n -= 1
                     ptr-=1
-                return self.parseEval(l, ptr+1, loop)
+                    # return self.parseEval(l, ptr, loop)
+                # jump up n lines
+                # TODO: handle no number after jump
+                elif w.v == "^":
+                    ptr += 1
+                    if ptr >= len(l):
+                        return
+                    n = self.parseEval([l[ptr]], 0, loop)
+                    if not n:
+                        n = 0
+                    n = int(n)
+                    for i in range(n+1):
+                        while l[ptr].v != "\n" and ptr > 0:
+                            ptr -= 1
+                        n -= 1
+                        ptr-=1
+                    # return self.parseEval(l, ptr+1, loop)
 
 
-            # ===== conditionals ======
+                # ===== conditionals ======
 
-            elif w.v == "f":
-                if self.getBag() != self.retrieve():
-                    while l[ptr].v != "\n":
-                        ptr += 1
-                return self.parseEval(l, ptr+1, loop)
+                elif w.v == "f":
+                    if self.getBag() != self.retrieve():
+                        while l[ptr].v != "\n":
+                            ptr += 1
+                    # return self.parseEval(l, ptr+1, loop)
 
-            elif w.v == "u":
-                if self.exists and len(self.ground()) > 0:
-                    while l[ptr].v != "\n" and ptr < len(l):
-                        ptr += 1
-                ptr +=1
-                return self.parseEval(l, ptr, loop)
+                elif w.v == "u":
+                    if self.exists and len(self.ground()) > 0:
+                        while l[ptr].v != "\n" and ptr < len(l):
+                            ptr += 1
+                    # ptr
+                    # return self.parseEval(l, ptr, loop)
 
-            # =======================================
-            # combine elements: backpack element is NOT
-            # consumed
-            elif w.v == "c":
-                if self.backpack:
-                    p = self.backpack[-1]
-                else:
-                    p = 0
-                p = int(p)
-                s = self.retrieve()
-                if not s:
-                    s = 0
-                s = int(s)
-                self.ground().append(str(s+p))
+                # =======================================
+                # combine elements: backpack element is NOT
+                # consumed
+                elif w.v == "c":
+                    if self.backpack:
+                        p = self.backpack[-1]
+                    else:
+                        p = 0
+                    p = int(p)
+                    s = self.retrieve()
+                    if not s:
+                        s = 0
+                    s = int(s)
+                    self.ground().append(str(s+p))
 
-                return self.parseEval(l, ptr+1, loop)
-            # subtract. backpack element IS consumed
-            elif w.v == "r":
-                p = self.getBag()
-                if not p:
-                    p = 0
-                p = int(p)
-                s = self.retrieve()
-                if not s:
-                    s = 0
-                s = int(s)
-                self.ground().append(str(max(s-p,0)))
+                    # return self.parseEval(l, ptr+1, loop)
+                # subtract. backpack element IS consumed
+                elif w.v == "r":
+                    p = self.getBag()
+                    if not p:
+                        p = 0
+                    p = int(p)
+                    s = self.retrieve()
+                    if not s:
+                        s = 0
+                    s = int(s)
+                    self.ground().append(str(max(s-p,0)))
 
-                return self.parseEval(l, ptr+1, loop)
-            # input number from stdin
-            elif w.v == "m":
-                s = input("")
-                try:
-                    i = int(s)
-                    self.backpack.append(s)
-                except:
-                    pass
-                self.parseEval(l, ptr+1, loop)
-            # execute filename in backpack
-            elif w.v == "x":
-                fn = ""
-                while len(self.backpack) > 0:
-                    fn += chr(int(self.getBag()))
-                fn += ".bpkr"
-                with open(fn) as r:
-                    text = r.read()
-                tkns = self.tokenize(text, fn=True)
-                self.parseEval(tkns, 0, loop)
-
-                return self.parseEval(l, ptr+1, loop)
-            # input file in backpack to ground
-            elif w.v == "I":
-                fn = ""
-                while len(self.backpack) > 0:
-                    fn += chr(int(self.getBag()))
-
-                try:
+                    # return self.parseEval(l, ptr+1, loop)
+                # input number from stdin
+                elif w.v == "m":
+                    s = input("")
+                    try:
+                        i = int(s)
+                        self.backpack.append(s)
+                    except:
+                        pass
+                    # self.parseEval(l, ptr+1, loop)
+                # execute filename in backpack
+                elif w.v == "x":
+                    fn = ""
+                    while len(self.backpack) > 0:
+                        fn += chr(int(self.getBag()))
+                    fn += ".bpkr"
                     with open(fn) as r:
-                       text = r.read()
-                       for t in text:
-                           self.ground().append(ord(t))
-                except:
+                        text = r.read()
+                    tkns = self.tokenize(text, fn=True)
+                    self.parseEval(tkns, 0, loop)
+
+                    # return self.parseEval(l, ptr+1, loop)
+                # input file in backpack to ground
+                elif w.v == "I":
+                    fn = ""
+                    while len(self.backpack) > 0:
+                        fn += chr(int(self.getBag()))
+
+                    try:
+                        with open(fn) as r:
+                           text = r.read()
+                           for t in text:
+                               self.ground().append(ord(t))
+                    except:
+                        pass
+                    # return self.parseEval(l, ptr+1, loop)
+
+                # write ground to file in backpack
+                elif w.v == "O":
+                    fn = ""
+                    while len(self.backpack) > 0:
+                        fn += chr(int(self.getBag()))
+
+                    try:
+                        with open(fn,"w") as w:
+                            for t in self.ground():
+                                w.write(chr(int(t)))
+                    except:
+                        pass
+
+                    # return self.parseEval(l, ptr+1, loop)
+
+                # go to location in backpack
+                elif w.v == "G":
+                    if len(self.ground()) >= 2:
+                        loc = self.ground()
+                        self.location[1] = loc.pop()
+                        self.location[0] = loc.pop()
+                    # return self.parseEval(l, ptr+1, loop)
+
+
+                else:
                     pass
-                return self.parseEval(l, ptr+1, loop)
-
-            # write ground to file in backpack
-            elif w.v == "O":
-                fn = ""
-                while len(self.backpack) > 0:
-                    fn += chr(int(self.getBag()))
-
-                try:
-                    with open(fn,"w") as w:
-                        for t in self.ground():
-                            w.write(chr(int(t)))
-                except:
-                    pass
-
-                return self.parseEval(l, ptr+1, loop)
-
-            # go home
-            elif w.v == "h":
-                self.location[0] = 0
-                self.location[1] = 0
-                return self.parseEval(l, ptr+1, loop)
-            # go to location in backpack
-            elif w.v == "G":
-                if len(self.ground()) >= 2:
-                    loc = self.ground()
-                    self.location[1] = loc.pop()
-                    self.location[0] = loc.pop()
-                return self.parseEval(l, ptr+1, loop)
-
-
-            else:
-                return self.parseEval(l, ptr+1, loop)
+            ptr+=1
 
 
 
