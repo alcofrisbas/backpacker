@@ -35,12 +35,8 @@ p10lp100lp108lp114lp111lp119lp32lp44lp111lp108lp108lp101lp104le
 ```
 prints "hello, world" to standard out, and
 
-```
-p256p1lcwcwgsslcep10le
-wlcsclcep10le
-^1
-```
-is an infinitely looping counter starting at 1, and the following is counter that counts to 10:
+
+is a counter that counts to 10:
 ```
 p0p1lcwcwsslcp0lep10le
 wlcsclcp0lep10lelc
@@ -57,7 +53,11 @@ p0fv2
 ^2
 
 ```
-The above code demonstrates how comments work. Any characters that are not numbers or in the above text are ignored and do not trigger errors. By convention, using all caps for comments makes them easier to read, and using arrows and quotations marks is helpful for being precise in explanation. The above code prints the numbers 99 to 0 to standard out.
+The above code demonstrates how comments work. Any characters that are not numbers or in the above text are ignored and do not trigger errors. By convention, using all caps for comments makes them easier to read, and using arrows and quotations marks is helpful for being precise in explanation. The above code prints the numbers 99 to 0 to standard out. As the language expands, more capital letters will be used as keywords, so a safer way to comment out a line is the following:
+
+```
+v0 This is a comment. all chars in this line are ignored
+```
 
 ### Fibonacci Sequence
 
@@ -91,10 +91,9 @@ One way to streamline or de-clutter code is to use code from another file. The f
 |Command|Action|
 |---|---|
 |x| reads characters from the backpack and looks for a file with that name. the child file is immediately tokenized and executed over the same ground as the parent file.|
-|k| destroys the contents of the backpack|
 |h| go to 'home' (0,0)|
 
-Just like assembly languages and hiking in the woods, it's very polite to leave the terrain as you found it. A conscientious child file should consume its input and refrain from dumping its integer waste all around in different stacks, as well leaving the backpack just way it found it. The only programs that use the 'k' command should be these child-program/subroutine files. Below is an example of two programs that add two integers and print the output.
+Just like assembly languages and hiking in the woods, it's very polite to leave the terrain as you found it. A conscientious child file should consume its input and refrain from dumping its integer waste all around in different stacks, as well as leaving the backpack just way it found it. Below is an example of two programs that add two integers and print the output.
 
 m.bpkr
 ```
@@ -118,25 +117,25 @@ Using ```x```, a file can call itself, but issues arise if the recursion needs a
 
 hf.bpkr
 ```
-wap1dp0ssamp INITIATE CONDITIONAL VALUES AND ITERATOR
-hap0ddp1     SETUP FIB
-hp102lx      CALL F
+wap1dp0ssamp v0 INITIATE CONDITIONAL VALUES AND ITERATOR
+hap0ddp1     v0 SETUP FIB
+hp102lx      v0 CALL F
 ```
 f.bpkr
 ```
-hwlcssalcpfv6 CHECK CONDITIIONAL
-hwalcdck     INCREMENT COUNTER
-hp10lalcp0lelcddckh PRINT AND ADD(QUASI N-TWO)
-wlcssalcpfv3 CHECK CONDITIIONAL
-hwalcdck     INCREMENT COUNTER
-hp10ldlcp0lelcaackh PRINT AND ADD(QUASI N-ONE)
-p102lx PRINT HI & CALL SELF
+hwlcssalcpfv6 v0 CHECK CONDITIIONAL
+hwalcdck      v0INCREMENT COUNTER
+hp10lalcp0lelcddckh v0 PRINT AND ADD(QUASI N-TWO)
+wlcssalcpfv3  v0 CHECK CONDITIIONAL
+hwalcdck      v0 INCREMENT COUNTER
+hp10ldlcp0lelcaackh v0 PRINT AND ADD(QUASI N-ONE)
+p102lx v0 PRINT HI & CALL SELF
 
 ```
 
 The reason why this function is questionable is because of how 'variables' work in backpacker. A good way to create a variable is to pick a location and stockpile integers there, just like a squirrel in fall. Then, when the information is needed again, the backpacker can go to that location and access it. The consequence of this is that there is no scope whatsoever.
 
-Using common sense, I gave ```hf``` 4 stacks north and south of home and reserved the stacks directly to the east and west for ```f```'s computation. A polite program does this. It is conscientious to respect boundaries, even if you can step right over them.
+Using common sense, I gave ```hf``` 4 stacks north and south of home and reserved the stacks directly to the east and west for ```f```'s computation. A polite program does this. It is nice to respect boundaries, even if you can step right over them.
 
 However, on first glance, this implementation steps over minor boundaries. Each it's called, ```f``` looks at variables that ```hf```  originally initiated, information 'owned' by ```hf```. This is a violation! Well, actually, it's not. The recursive method of generating the fibonacci sequence uses parameters. This apparent breach of privacy is actually just ```f``` taking the previous two fibonacci numbers and a counter, just like any other recursive implementation of the fibonacci sequence.
 
